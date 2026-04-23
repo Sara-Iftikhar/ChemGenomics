@@ -1,6 +1,5 @@
 # Bacterial Fitness Predictor
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19707430.svg)](https://doi.org/10.5281/zenodo.19707430)
 
 Predict the absolute fitness of a bacterial strain under different growth conditions from a genome FASTA file using NGBoost probabilistic regression.
 
