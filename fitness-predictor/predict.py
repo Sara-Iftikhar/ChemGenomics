@@ -179,7 +179,7 @@ def predict(condition, fasta, identity=95.0, coverage=80.0):
 # Data download
 # ──────────────────────────────────────────────────────────────
 
-RELEASE_BASE = "https://github.com/Sara-Iftikhar/ChemGenomics/releases/download/v0.1.0"
+RELEASE_BASE = "https://zenodo.org/records/19707430/files"
 
 def download_data(dest_dir):
     import urllib.request, tarfile

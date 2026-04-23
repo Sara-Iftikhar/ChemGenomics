@@ -1,25 +1,39 @@
 # Bacterial Fitness Predictor
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19707430.svg)](https://doi.org/10.5281/zenodo.19707430)
+
 Predict the absolute fitness of a bacterial strain under different growth conditions from a genome FASTA file using NGBoost probabilistic regression.
 
-## Requirements
-
-- [Anaconda](https://www.anaconda.com/download) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
-
 ## Installation
+
+### Option 1 — Conda
+
+Requires [Anaconda](https://www.anaconda.com/download) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
 
 ```bash
 conda install -c gzhoubioinf -c bioconda -c conda-forge fitness-predictor
 ```
 
-## Setup (one time)
+Then download models and reference data (one time):
 
 ```bash
-# Download models and reference data
 fitness-predict --download-data ~/fitness_data
-
-# Go to the data directory
 cd ~/fitness_data
+```
+
+### Option 2 — Docker
+
+Requires [Docker](https://docs.docker.com/get-docker/). Models and reference are bundled in the image — no data download needed.
+
+```bash
+docker pull gzhoubioinf09/fitness-predictor:v0.1.0
+
+# List available conditions
+docker run --rm gzhoubioinf09/fitness-predictor:v0.1.0 --list
+
+# Predict fitness (mount your directory to access FASTA and save output)
+docker run --rm -v $(pwd):/data gzhoubioinf09/fitness-predictor:v0.1.0 \
+    -c <condition> -p /data/genome.fasta
 ```
 
 ## Usage
