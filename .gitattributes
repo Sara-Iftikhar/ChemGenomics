@@ -1,0 +1,2 @@
+fitness-predictor/models.tar.gz filter=lfs diff=lfs merge=lfs -text
+fitness-predictor/pan_genome_reference.fa filter=lfs diff=lfs merge=lfs -text
