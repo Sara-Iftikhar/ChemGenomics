@@ -1,6 +1,5 @@
 # Bacterial Fitness Predictor
 
-
 Predict the absolute fitness of a bacterial strain under different growth conditions from a genome FASTA file using NGBoost probabilistic regression.
 
 ## Installation
@@ -37,20 +36,20 @@ docker run --rm -v $(pwd):/data gzhoubioinf09/fitness-predictor:v0.1.0 \
 
 ## Usage
 
+> For conda users: run commands from `~/fitness_data` (where models are downloaded).
+
 ```bash
-cd ~/fitness_data
-
-# Predict fitness for a strain (FASTA can be any path)
-fitness-predict -c Doripenem0125ugml -p /path/to/genome.fasta
-
-# Predict with gzipped FASTA
-fitness-predict -c LB -p /path/to/genome.fasta.gz
-
 # List all available conditions (160 total)
 fitness-predict --list
 
+# Predict fitness for a strain (FASTA can be any path)
+fitness-predict -c <condition> -p /path/to/genome.fasta
+
+# Predict with gzipped FASTA
+fitness-predict -c <condition> -p /path/to/genome.fasta.gz
+
 # Custom BLAST thresholds (default: identity=95, coverage=80)
-fitness-predict -c Citricacid -p /path/to/genome.fasta --identity 80 --coverage 60
+fitness-predict -c <condition> -p /path/to/genome.fasta --identity 80 --coverage 60
 ```
 
 ### Output
@@ -65,9 +64,9 @@ Fitness (mean) : 1.0842
 Result saved   : genome_Doripenem0125ugml_prediction.json
 ```
 
-- **Fitness > 1** — strain grows better than average under this condition
-- **Fitness ≈ 1** — strain grows similarly to average
-- **Fitness < 1** — strain grows worse than average
+- **Fitness > 1** — strain grows better under this condition than in the control (LB)
+- **Fitness ≈ 1** — strain grows similarly to the control
+- **Fitness < 1** — strain grows worse than in the control (LB)
 
 ## Accepted input formats
 
@@ -88,11 +87,10 @@ Models were trained on 160 conditions using GWAS-significant genes (Benjamini-Ho
 ## File structure
 
 ```
-fitness_predictor/
+fitness-predictor/
 ├── predict.py              # CLI prediction script
 ├── environment.yml         # Conda environment
 ├── requirements.txt        # Pip dependencies
-├── pyproject.toml          # Installs fitness-predict command
 ├── pan_genome_reference.fa # BLAST reference (pan-genome genes)
 └── models/                 # 160 trained NGBoost models (.joblib)
 ```
