@@ -67,23 +67,29 @@ Genes detected : 412 / 4751
 Fitness (mean) : 1.0842
 95% CI         : [0.8901, 1.2783]
 
-Result saved   : genome_Doripenem0125ugml_prediction.json
+Result saved   : genome_Doripenem0125ugml_prediction.csv
 ```
 
 - **Fitness > 1** — strain grows better than the median strain on the plate
 - **Fitness ≈ 1** — strain grows at the median rate
 - **Fitness < 1** — strain grows worse than the median strain on the plate
 
-With `--explain`, SHAP gene contributions are also printed and saved to the JSON:
+Two CSV files are saved:
+
+| File | Contents |
+|---|---|
+| `genome_<condition>_prediction.csv` | One-row summary: condition, fasta, genes_hit, total_genes, fitness_mean, ci95_lower, ci95_upper |
+| `genome_<condition>_shap.csv` | One row per gene: gene, shap, effect, annotation *(only with `--explain`)* |
+
+With `--explain`, SHAP gene contributions are also printed:
 
 ```
 SHAP (baseline fitness with no genes: 0.7485)
-  Gene                                 SHAP  Effect
-  ------------------------------ ----------  ------
-  blaCTXM~~~blaCTXM15              +0.14676  promotes
-  group_5082                       -0.08161  reduces
-  group_8522                       +0.07659  promotes
-  ...
+  Gene                           SHAP      Effect      Annotation
+  ---------------------------- ----------  ----------  ----------
+  blaCTXM~~~blaCTXM15          +0.14676  promotes    CTX-M family extended-spectrum class A beta-lactamase
+  group_5082                   -0.08161  reduces     Transposase
+  group_8522                   +0.07659  promotes    ...
 ```
 
 - **Baseline** — predicted fitness of a hypothetical strain with no pan-genome genes
@@ -120,9 +126,10 @@ The baseline is the model's prediction for an all-zeros gene vector (no genes pr
 
 ```
 fitness-predictor/
-├── predict.py              # CLI prediction script
-├── environment.yml         # Conda environment
-├── requirements.txt        # Pip dependencies
-├── pan_genome_reference.fa # BLAST reference (pan-genome genes)
-└── models/                 # 160 trained NGBoost models (.joblib)
+├── predict.py                          # CLI prediction script
+├── environment.yml                     # Conda environment
+├── requirements.txt                    # Pip dependencies
+├── pan_genome_reference.fa             # BLAST reference (pan-genome genes)
+├── gene_presence_absence_roary.csv     # Gene annotations (used by --explain)
+└── models/                             # 160 trained NGBoost models (.joblib)
 ```
