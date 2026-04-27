@@ -19,24 +19,7 @@ fitness-predict --download-data ~/fitness_data
 cd ~/fitness_data
 ```
 
-### Option 2 — Docker
-
-Requires [Docker](https://docs.docker.com/get-docker/). Models and reference are bundled in the image — no data download needed.
-
-```bash
-docker pull gzhoubioinf09/fitness-predictor:v0.1.0
-
-# List available conditions
-docker run --rm gzhoubioinf09/fitness-predictor:v0.1.0 --list
-
-# Predict fitness (mount your directory to access FASTA and save output)
-docker run --rm -v $(pwd):/data gzhoubioinf09/fitness-predictor:v0.1.0 \
-    -c <condition> -p /data/genome.fasta
-```
-
-## Usage
-
-> For conda users: run commands from `~/fitness_data` (where models are downloaded).
+Run predictions from `~/fitness_data`:
 
 ```bash
 # List all available conditions (160 total)
@@ -56,6 +39,29 @@ fitness-predict -c <condition> -p /path/to/genome.fasta --explain
 
 # Show top 30 genes instead of the default 20
 fitness-predict -c <condition> -p /path/to/genome.fasta --explain --top-n 30
+```
+
+### Option 2 — Docker
+
+Requires [Docker](https://docs.docker.com/get-docker/). Models and reference are bundled in the image — no data download needed.
+
+```bash
+docker pull gzhoubioinf09/fitness-predictor:v0.2.0
+
+# List available conditions
+docker run --rm gzhoubioinf09/fitness-predictor:v0.2.0 --list
+
+# Predict fitness (e.g. condition=Doripenem0125ugml, FASTA in current directory)
+docker run --rm -v $(pwd):/data gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta
+
+# Custom BLAST thresholds (default: identity=95, coverage=80)
+docker run --rm -v $(pwd):/data gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta --identity 80 --coverage 60
+
+# SHAP explanation
+docker run --rm -v $(pwd):/data gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta --explain
+
+# SHAP explanation with top 30 genes
+docker run --rm -v $(pwd):/data gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta --explain --top-n 30
 ```
 
 ### Output
@@ -130,6 +136,6 @@ fitness-predictor/
 ├── environment.yml                     # Conda environment
 ├── requirements.txt                    # Pip dependencies
 ├── pan_genome_reference.fa             # BLAST reference (pan-genome genes)
-├── gene_presence_absence_roary.csv     # Gene annotations (used by --explain)
+├── gene_annotations.csv                # Gene annotations (used by --explain)
 └── models/                             # 160 trained NGBoost models (.joblib)
 ```
