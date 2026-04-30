@@ -1,6 +1,11 @@
 # Chemical Genomics Fitness Value Analysis
 
-This folder contains the R script and input data required to generate fitness-value, GWAS, AMR, pangenome, and machine-learning related figures for the chemical genomics analysis.
+This repository contains the R script required to generate fitness-value, GWAS, AMR, pangenome, and machine-learning related figures for the chemical genomics analysis.
+
+The input data are not stored in this GitHub repository because the data files are large.  
+The complete dataset can be downloaded from Zenodo:
+
+**Data DOI:** https://doi.org/10.5281/zenodo.19931379
 
 ## Main script
 
@@ -8,11 +13,17 @@ This folder contains the R script and input data required to generate fitness-va
 Figures_FitnessValue.R
 ```
 
-This script performs downstream analyses and plotting using colony fitness measurements, condition metadata, AMR gene results, GWAS outputs, pangenome data, and machine-learning prediction results.
+This script performs downstream analyses and plotting using colony fitness measurements, condition metadata, AMR gene results, GWAS outputs, pangenome data, distance matrices, clustering results, and machine-learning prediction results.
 
-## Folder structure
+## Data availability
 
-The expected folder structure is:
+All required input data are available on Zenodo:
+
+```text
+https://doi.org/10.5281/zenodo.19931379
+```
+
+After downloading the data from Zenodo, place the downloaded `Data/` folder in the project root directory so that the folder structure looks like this:
 
 ```text
 .
@@ -25,13 +36,17 @@ The expected folder structure is:
     ├── condition_group.csv
     ├── gene_1.csv
     ├── gene_presence_absence.Rtab
+    ├── group_3530_presence_absence.tsv
     ├── GWAS_results_SNPs_Pangenome.csv
+    ├── ML_clusters.csv
     ├── pangenome_pliotropy.csv
     ├── pan_genome_reference.fa
     ├── predictive_totall_importance_1.csv
     ├── SHAP_important_features.csv
     ├── SNP_GWAS_annot.csv
     ├── summary_ARG.tsv
+    ├── total_distance_matrix.csv
+    ├── tot_results.tsv
     ├── conditions/
     │   ├── plate_tr_1.tsv
     │   ├── plate_tr_2.tsv
@@ -43,71 +58,43 @@ The expected folder structure is:
     └── SNP_GWAS.zip
 ```
 
-The `.DS_Store` files are macOS system files and are not required for the analysis.
-
-## Required data files
-
-The following files are required directly inside the `Data/` folder:
-
-```text
-Data/absolute_fitness_ML.csv
-Data/AMR_genes.csv
-Data/AMRFinder_results.tsv
-Data/condition_group.csv
-Data/GWAS_results_SNPs_Pangenome.csv
-Data/gene_1.csv
-Data/gene_presence_absence.Rtab
-Data/pangenome_pliotropy.csv
-Data/pan_genome_reference.fa
-Data/predictive_totall_importance_1.csv
-Data/SHAP_important_features.csv
-Data/SNP_GWAS_annot.csv
-Data/summary_ARG.tsv
-```
-
-The following plate-layout files are required inside `Data/conditions/`:
-
-```text
-Data/conditions/plate_tr_1.tsv
-Data/conditions/plate_tr_2.tsv
-Data/conditions/plate_tr_3.tsv
-Data/conditions/plate_tr_4.tsv
-```
-
 ## Data files and folders
 
 Each item in the `Data/` folder is described briefly below.
 
 | Path | Description |
 |---|---|
-| `Data/AMR_genes.csv` | Antimicrobial-resistance gene matrix or summary used for AMR feature analysis and plotting. |
-| `Data/.DS_Store` | macOS system metadata file; not required for the analysis and can be ignored. |
-| `Data/condition_group.csv` | Metadata table linking experimental condition/file names to condition categories, chemicals, and chemical classes. |
-| `Data/GWAS_results_SNPs_Pangenome.csv` | Combined GWAS hit table containing SNP and pangenome association results used for downstream summaries and figures. |
-| `Data/results_prediction.zip` | Compressed archive containing machine-learning prediction result files; unzip before running sections that read prediction outputs. |
-| `Data/assay_results_full.zip` | Compressed archive containing raw IRIS colony assay result files for each condition and replicate; unzip before running fitness-processing sections. |
-| `Data/gene_presence_absence.Rtab` | Roary-style gene presence/absence matrix used as pangenome input for prediction and gene-based analyses. |
-| `Data/summary_ARG.tsv` | Summary table of ARG/plasmid-related annotations used to compare resistance profiles and fitness patterns. |
-| `Data/gene_1.csv` | Isolate or gene annotation table used to link isolates/features with downstream pangenome and prediction analyses. |
-| `Data/pan_genome_reference.fa` | FASTA reference file for the pan-genome sequences used for annotation or sequence lookup. |
-| `Data/panGenome.zip` | Compressed archive containing pan-genome GWAS result files; unzip before running pangenome GWAS sections. |
-| `Data/conditions/` | Folder containing plate layout files that map colony positions to strain/isolate identifiers for each plate replicate. |
-| `Data/conditions/.DS_Store` | macOS system metadata file inside the conditions folder; not required for the analysis. |
-| `Data/conditions/plate_tr_1.tsv` | Plate layout file for replicate/plate 1. |
-| `Data/conditions/plate_tr_2.tsv` | Plate layout file for replicate/plate 2. |
-| `Data/conditions/plate_tr_3.tsv` | Plate layout file for replicate/plate 3. |
-| `Data/conditions/plate_tr_4.tsv` | Plate layout file for replicate/plate 4. |
 | `Data/absolute_fitness_ML.csv` | Main absolute-fitness matrix used for machine-learning and condition-level fitness analyses. |
+| `Data/AMR_genes.csv` | Antimicrobial-resistance gene matrix or summary used for AMR feature analysis and plotting. |
 | `Data/AMRFinder_results.tsv` | AMRFinder output table containing detected antimicrobial-resistance, virulence, or related gene annotations. |
-| `Data/SNP_GWAS.zip` | Compressed archive containing SNP GWAS result files; unzip before running SNP GWAS plotting sections. |
-| `Data/SNP_GWAS_annot.csv` | Annotation table for SNP GWAS hits, used to map significant SNPs to genes or functional descriptions. |
+| `Data/condition_group.csv` | Metadata table linking experimental condition/file names to condition categories, chemicals, and chemical classes. |
+| `Data/gene_1.csv` | Isolate or gene annotation table used to link isolates/features with downstream pangenome and prediction analyses. |
+| `Data/gene_presence_absence.Rtab` | Roary-style gene presence/absence matrix used as pangenome input for prediction and gene-based analyses. |
+| `Data/group_3530_presence_absence.tsv` | Group-level gene presence/absence table used for pangenome or feature-level analysis. |
+| `Data/GWAS_results_SNPs_Pangenome.csv` | Combined GWAS hit table containing SNP and pangenome association results used for downstream summaries and figures. |
+| `Data/ML_clusters.csv` | Machine-learning cluster assignment table used for cluster-level analysis and plotting. |
 | `Data/pangenome_pliotropy.csv` | Pangenome pleiotropy results summarizing genes associated with multiple conditions or traits. |
-| `Data/SHAP_important_features.csv` | SHAP-based feature-importance results from machine-learning models. |
+| `Data/pan_genome_reference.fa` | FASTA reference file for the pan-genome sequences used for annotation or sequence lookup. |
 | `Data/predictive_totall_importance_1.csv` | Aggregated predictive feature-importance table used for summary plots of important genes/features. |
+| `Data/SHAP_important_features.csv` | SHAP-based feature-importance results from machine-learning models. |
+| `Data/SNP_GWAS_annot.csv` | Annotation table for SNP GWAS hits, used to map significant SNPs to genes or functional descriptions. |
+| `Data/summary_ARG.tsv` | Summary table of ARG/plasmid-related annotations used to compare resistance profiles and fitness patterns. |
+| `Data/total_distance_matrix.csv` | Pairwise distance matrix used for clustering, similarity analysis, or distance-based visualization. |
+| `Data/tot_results.tsv` | Total or combined results table used in downstream analysis and plotting. |
+| `Data/conditions/` | Folder containing plate-layout files that map colony positions to strain/isolate identifiers for each plate replicate. |
+| `Data/conditions/plate_tr_1.tsv` | Plate-layout file for replicate/plate 1. |
+| `Data/conditions/plate_tr_2.tsv` | Plate-layout file for replicate/plate 2. |
+| `Data/conditions/plate_tr_3.tsv` | Plate-layout file for replicate/plate 3. |
+| `Data/conditions/plate_tr_4.tsv` | Plate-layout file for replicate/plate 4. |
+| `Data/assay_results_full.zip` | Compressed archive containing raw IRIS colony assay result files for each condition and replicate; unzip before running fitness-processing sections. |
+| `Data/results_prediction.zip` | Compressed archive containing machine-learning prediction result files; unzip before running sections that read prediction outputs. |
+| `Data/panGenome.zip` | Compressed archive containing pan-genome GWAS result files; unzip before running pangenome GWAS sections. |
+| `Data/SNP_GWAS.zip` | Compressed archive containing SNP GWAS result files; unzip before running SNP GWAS plotting sections. |
+| `Data/.DS_Store` | macOS system metadata file; not required for the analysis and can be ignored. |
 
 ## Compressed folders
 
-Some required inputs are provided as ZIP files. Unzip them before running the R script.
+Some required inputs are provided as ZIP files in the Zenodo dataset. Unzip them before running the R script.
 
 From the project root, run:
 
@@ -213,7 +200,33 @@ BiocManager::install(c(
 
 ## How to run
 
-Run the script from the project root directory:
+1. Clone this repository:
+
+```bash
+git clone https://github.com/Sara-Iftikhar/ChemGenomics.git
+cd ChemGenomics
+```
+
+2. Download the required data from Zenodo:
+
+```text
+https://doi.org/10.5281/zenodo.19931379
+```
+
+3. Place the downloaded `Data/` folder inside the project root.
+
+4. Unzip the compressed folders inside `Data/`:
+
+```bash
+cd Data
+unzip assay_results_full.zip
+unzip results_prediction.zip
+unzip panGenome.zip
+unzip SNP_GWAS.zip
+cd ..
+```
+
+5. Run the R script from the project root directory:
 
 ```bash
 Rscript Figures_FitnessValue.R
@@ -221,30 +234,11 @@ Rscript Figures_FitnessValue.R
 
 Alternatively, open `Figures_FitnessValue.R` in RStudio and run the script section by section.
 
-## Checking that files exist
-
-To check whether a file exists in the `Data/` folder:
-
-```bash
-find Data -type f -name "filename.csv"
-```
-
-Example:
-
-```bash
-find Data -type f -name "AMRFinder_results.tsv"
-```
-
-To search all child folders while hiding permission warnings:
-
-```bash
-find Data -type f -name "filename.csv" 2>/dev/null
 ```
 
 ## Notes
 
-- Unzip all compressed folders before running the script.
+- The data are available from Zenodo and are not included directly in this GitHub repository.
+- Unzip all compressed folders before running the relevant sections of the script.
 - Make sure the paths in the R script match the actual location of the `Data` folder.
 - The script is designed as an analysis/figure-generation workflow and may be easier to run section by section in RStudio.
-- Some outputs may be generated during execution and reused by later sections of the script.
-- If a file is missing, use `find` to locate it in the project folder and copy it into the expected `Data/` subfolder.
