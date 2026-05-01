@@ -269,7 +269,7 @@ Models were trained on 160 conditions using GWAS-significant genes (Benjamini-Ho
 
 ## Contact
 
-This is a joint project developed by the **Infectious Disease Epidemiology Lab (KAUST)** and the **Banzhaf Lab (Newcastle University)**.
+This is a joint project developed by the **[Infectious Disease Epidemiology Lab](https://ide.kaust.edu.sa/) (KAUST)** and the **Banzhaf Lab (Newcastle University)**.
 
 | Name | Role | Email |
 |---|---|---|
