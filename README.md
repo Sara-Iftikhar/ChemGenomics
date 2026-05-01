@@ -141,6 +141,18 @@ docker run -v "$PWD/Data:/Data" <image_name>
 
 Predict the absolute fitness of a bacterial strain under different growth conditions from a genome FASTA file using NGBoost probabilistic regression.
 
+### File structure
+
+```
+fitness-predictor/
+├── predict.py                  # Main prediction script
+├── environment.yml             # Conda environment definition
+├── requirements.txt            # Pip dependencies
+├── pan_genome_reference.fa     # BLAST reference (pan-genome genes)
+├── gene_annotations.csv        # Gene annotations (used by --explain)
+└── models/                     # 160 trained NGBoost models (.joblib)
+```
+
 ### Installation
 
 **Option 1 — Conda**
