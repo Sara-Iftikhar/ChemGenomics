@@ -264,3 +264,14 @@ Models were trained on 160 conditions using GWAS-significant genes (Benjamini-Ho
 | `.fasta`, `.fa`, `.fna` | Yes |
 | `.fasta.gz`, `.fa.gz`, `.fna.gz` | Yes (decompressed automatically) |
 | `.fasta.bz2`, `.fasta.zst` | No |
+
+---
+
+## Contact
+
+This is a joint project developed by the **Infectious Disease Epidemiology Lab (KAUST)** and the **Banzhaf Lab (Newcastle University)**.
+
+| Name | Role | Email |
+|---|---|---|
+| Danesh Moradigaravand | PI, KAUST | danesh.moradigaravand@kaust.edu.sa |
+| Manuel Banzhaf | PI, Newcastle University | manuel.banzhaf@newcastle.ac.uk |
