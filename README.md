@@ -1,6 +1,6 @@
 # Chemical Genomics Analysis
 
-This repository contains the code and tools for chemical genomics fitness analysis of bacterial isolates, including figure generation scripts and a machine-learning fitness predictor.
+This repository contains code, data, and tools for analyzing *Klebsiella pneumoniae* fitness across 225 growth conditions, including corrected IRIS colony assay files, figure-generation scripts, and an NGBoost-based command-line predictor that estimates strain fitness from genome assemblies.
 
 ---
 
