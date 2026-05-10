@@ -8,11 +8,18 @@ This repository contains the code and tools for chemical genomics fitness analys
 
 | Component | Description |
 |---|---|
+| `iris_processed_file/` | Manually corrected IRIS colony assay files (`*_modified.iris`) |
 | `Figures_FitnessValue.R` | R script to generate all fitness, GWAS, AMR, pan-genome, and ML figures |
 | `fitness-predictor` | CLI tool to predict bacterial fitness from genome FASTA (conda / Docker) |
-| `iris_processed_file/` | Manually corrected IRIS colony assay files (`*_modified.iris`) |
 
 
+
+
+---
+
+## IRIS Processed Files
+
+The `iris_processed_file/` directory contains corrected IRIS colony assay files (`*_modified.iris`). Raw IRIS measurements record zero-size colonies that may represent poor growth, normal growth, or imaging artefacts rather than true absences. Each zero-size colony was manually reviewed and reclassified before being written back into the corrected `_modified.iris` files used for downstream fitness analysis.
 
 ---
 
@@ -269,12 +276,6 @@ Models were trained on 160 conditions using GWAS-significant genes (Benjamini-Ho
 | `.fasta.bz2`, `.fasta.zst` | No |
 
 ---
-
-
-## IRIS Processed Files
-
-The `iris_processed_file/` directory contains corrected IRIS colony assay files (`*_modified.iris`). Raw IRIS measurements record zero-size colonies that may represent poor growth, 
-normal growth, or imaging artefacts rather than true absences. Each zero-size colony was manually reviewed and reclassified before being written back into the corrected `_modified.iris` files used for downstream fitness analysis.
 
 ## Contact
 
