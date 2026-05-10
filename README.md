@@ -19,7 +19,7 @@ This repository contains code, data, and tools for high-throughput chemical geno
 
 ## IRIS Processed Files
 
-The `iris_processed_file/` directory contains corrected IRIS colony assay files (`*_modified.iris`). Raw IRIS measurements record zero-size colonies that may represent poor growth, normal growth, or imaging artefacts rather than true absences. Each zero-size colony was manually reviewed and reclassified before being written back into the corrected `_modified.iris` files used for downstream fitness analysis.
+The `iris_processed_file/` directory contains corrected IRIS colony assay files (`*_modified.iris`). Raw IRIS measurements record zero-size colonies that may represent poor growth, normal growth, over growth rather than true absences. Each zero-size colony was manually reviewed and reclassified before being written back into the corrected `_modified.iris` files used for downstream fitness analysis.
 
 ---
 
