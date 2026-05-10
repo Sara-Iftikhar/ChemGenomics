@@ -1,6 +1,6 @@
 # Chemical Genomics Analysis
 
-This repository contains code, data, and tools for analyzing *Klebsiella pneumoniae* fitness across 225 growth conditions, including corrected IRIS colony assay files, figure-generation scripts, and an NGBoost-based command-line predictor that estimates strain fitness from genome assemblies.
+This repository contains code, data, and tools for high-throughput chemical genomics screening of *Klebsiella pneumoniae* clinical isolates across 225 growth conditions, including corrected IRIS colony assay files, figure-generation scripts, and an NGBoost-based command-line predictor that estimates strain fitness from genome assemblies.
 
 ---
 
