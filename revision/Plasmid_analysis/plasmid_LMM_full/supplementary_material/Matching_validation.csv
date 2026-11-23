@@ -1,0 +1,3 @@
+Method,N_combinations,N_tests,N_nominal,N_FDR,N_balanced,N_unbalanced
+Exact,19,4066,332,0,19,0
+Propensity,19,4066,307,0,12,7

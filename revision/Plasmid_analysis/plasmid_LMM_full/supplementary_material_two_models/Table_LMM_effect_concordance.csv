@@ -1,0 +1,2 @@
+N_matched,Pearson,Spearman,Direction_agreement_pct,Median_abs_beta_M1,Median_abs_beta_M2,Median_attenuation_pct,N_evaluable_attenuation,Median_SE_M1,Median_SE_M2,Median_SE_ratio,Median_SE_change_pct,Percent_SE_increased,N_evaluable_SE,N_significant_M1,N_significant_M2,N_significant_both,N_significant_both_concordant
+2140,0.6071717501340079,0.7082850173146918,80.74766355140187,0.022095020037519845,0.018665760786028503,19.010080101219046,2140,0.01707592060564546,0.019771884813971977,1.0310133991006665,3.101339910066636,68.3177570093458,2140,281,8,8,8

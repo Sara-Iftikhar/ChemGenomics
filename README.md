@@ -11,6 +11,7 @@ This repository contains code, data, and tools for high-throughput chemical geno
 | `iris_processed_file/` | Manually corrected IRIS colony assay files (`*_modified.iris`) |
 | `Figures_FitnessValue.R` | R script to generate all fitness, GWAS, AMR, pan-genome, and ML figures |
 | `fitness-predictor` | CLI tool to predict bacterial fitness from genome FASTA (conda / Docker) |
+| `revision/` | Additional analyses from manuscript revision: model overfitting and plasmid replicon fitness effects |
 
 
 
@@ -274,6 +275,90 @@ Models were trained on 160 conditions using GWAS-significant genes (Benjamini-Ho
 | `.fasta`, `.fa`, `.fna` | Yes |
 | `.fasta.gz`, `.fa.gz`, `.fna.gz` | Yes (decompressed automatically) |
 | `.fasta.bz2`, `.fasta.zst` | No |
+
+---
+
+## Revision Analyses
+
+The `revision/` directory contains the extra analyses added while the manuscript was being revised. There are two parts:
+
+```
+revision/
+├── Overfitting_analysis/
+│   ├── Overfitting_analysis.R               # Overfitting figure
+│   ├── all_models_mean_sd_five_runs.csv     # Model performance
+│   ├── feature_counts_aggregated.csv        # Feature counts
+│   └── condition_group.csv                  # Condition categories
+└── Plasmid_analysis/
+    ├── plasmid_analysis.R                   # Plasmid analysis
+    └── plasmid_LMM_full/
+        ├── LMM_all_results.csv              # LMM results
+        ├── within_ST_matching/              # Matching results
+        ├── copy_number/                     # Copy-number results
+        ├── replicon_cargo_VIF/              # VIF results
+        ├── supplementary_material/          # Old outputs
+        └── supplementary_material_two_models/  # Final outputs
+```
+
+### 1. Overfitting analysis
+
+This checks whether the fitness-prediction models overfit. For each condition it takes the best-performing model (highest mean test Spearman ρ over five runs) and reports:
+
+- **Train–test gap**: ρ(train) − ρ(test)
+- **Validation–test gap**: ρ(cross-validation) − ρ(test)
+- **Feature counts**: mean ± SD number of pan-genome, SNP, and unitig features selected
+
+Conditions are ordered and coloured by condition category.
+
+| Output | Description |
+|---|---|
+| `FigureS10_Overfitting_FeatureCounts_SD.pdf` / `.png` | Five-panel figure: two gap panels and three feature-count panels |
+| `FigureS10_All_Data.csv` | Data behind the figure |
+| `FigureS10_Condition_Index.csv` | Lookup from condition number on the x-axis to condition name and category |
+
+### 2. Plasmid replicon analysis
+
+This tests whether the fitness effects linked to plasmid replicons come from the replicon itself or from the resistance and virulence genes (cargo) it carries. It looks at 10 replicons (Col440II_1 is excluded) and 7 cargo genes (*bla*<sub>OXA-48</sub>, *bla*<sub>NDM</sub>, *bla*<sub>CTX-M-15</sub>, *bla*<sub>OXA-232</sub>, *bla*<sub>KPC-2</sub>, *iuc*, *ybt*).
+
+Two linear mixed models are compared for each condition × replicon pair:
+
+- **M1 (ST-adjusted)**: fitness ~ replicon + (1 | ST)
+- **M2 (ST + cargo)**: M1 plus the seven cargo genes as covariates
+
+The script summarises the LMM results and adds these supporting analyses:
+
+| Output (in `supplementary_material_two_models/`) | Analysis |
+|---|---|
+| `Figure_S1_LMM`, `Table_S1_LMM.csv` | Number of FDR-significant (< 0.05) associations per replicon under M1 and M2 |
+| `Figure_S2_Effect_Concordance`, `Table_LMM_paired_model_comparison.csv` | Agreement between M1 and M2 coefficients: direction, attenuation, and SE change |
+| `Figure_LMM_Attenuation_and_Precision` | How much effect sizes shrink and SEs grow after adjusting for cargo |
+| `Figure_S3_Cooccurrence` | How often each replicon and cargo gene occur in the same isolate |
+| `Figure_S4_VIF`, `Table_S4_VIF_seven_cargo.csv` | Collinearity between replicons and cargo (variance inflation factors) |
+| `Figure_S5_ONT_Physical_Linkage`, `Table_S5_ONT_Physical_Linkage.csv` | Cargo found on the same plasmid as the replicon in ONT long-read assemblies |
+| `Figure_S6_Matching_Diagnostics`, `Table_Matching_*.csv` | Balance checks for within-ST propensity-score matching |
+| `Figure_S7_Matched_Fitness` | Fitness of carriers vs matched non-carriers within the same ST |
+| `Figure_S8_Copy_Number`, `Figure_S9_Copy_Number_Fitness` | Plasmid copy number and how it relates to fitness |
+| `Figure_S10_Replicon_fitness_and_cargo` | Four-panel summary (significant associations, concordance, ONT linkage, matched effects) |
+| `ColKP3_*.csv`, `IncFII_pKP91_significant_associations.csv` | Case studies: ColKP3 with or without *bla*<sub>OXA-181/232</sub>, and IncFII pKP91 |
+
+### Required R packages
+
+```r
+install.packages(c("tidyverse", "patchwork", "scales", "ragg"))
+```
+
+The figures use the Arial font through `cairo_pdf`. On Linux you may need to install Arial, or change `base_family`.
+
+### How to run
+
+Both scripts currently use a hard-coded `base` path at the top. Change it to point at your copy of `revision/`, then run:
+
+```bash
+Rscript revision/Overfitting_analysis/Overfitting_analysis.R
+Rscript revision/Plasmid_analysis/plasmid_analysis.R
+```
+
+`plasmid_analysis.R` summarises LMM, matching, and copy-number results that were already computed and are stored in `plasmid_LMM_full/`. The ONT panel (Figure S5) also needs `plasmid/plasmid_best_hits_with_Kleborate.tsv`, which is not included in this repository.
 
 ---
 
