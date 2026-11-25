@@ -1,6 +1,6 @@
 # Chemical Genomics Analysis
 
-This repository contains code and tools for high-throughput chemical genomics screening of *Klebsiella pneumoniae* clinical isolates across 225 growth conditions, including corrected IRIS colony assay files, figure-generation scripts, and an NGBoost-based command-line predictor that estimates strain fitness from genome assemblies.
+This repository contains code and tools for high-throughput chemical genomics screening of *Klebsiella pneumoniae* clinical isolates across 214 growth conditions, including corrected IRIS colony assay files, figure-generation scripts, and an NGBoost-based command-line predictor that estimates strain fitness from genome assemblies.
 
 ---
 
@@ -9,8 +9,8 @@ This repository contains code and tools for high-throughput chemical genomics sc
 | Component | Description |
 |---|---|
 | `iris_processed_file/` | Manually corrected IRIS colony assay files (`*_modified.iris`) |
-| `Figures_FitnessValue.R` | R script to generate all fitness, GWAS, AMR, pan-genome, and ML figures |
-| `fitness-predictor` | CLI tool to predict bacterial fitness from genome FASTA (conda / Docker) |
+| `OriginalAnalysis/Figures_FitnessValue.R` | R script to generate all fitness, GWAS, AMR, pan-genome, and ML figures |
+| `fitness-predictor/` | CLI tool to predict bacterial fitness from genome FASTA (conda / Docker) |
 | Revision analyses | Scripts and data for the manuscript revision, available on Zenodo (see [Revision Analyses](#revision-analyses)) |
 
 ---
@@ -21,7 +21,7 @@ The `iris_processed_file/` directory contains corrected IRIS colony assay files 
 
 ---
 
-## Figures
+## Original Analysis
 
 ### Data availability
 
@@ -29,23 +29,19 @@ Input data are not stored in this repository due to file size. Download from Zen
 
 **Data DOI:** https://doi.org/10.5281/zenodo.19931379
 
-The main figures use the original release; the `Revision/` analyses use the revised release (see [Revision Analyses](#revision-analyses)).
-
-After downloading, place the `Data/` folder in the project root:
+`Figures_FitnessValue.R` uses this original release. The script reads its input from the absolute path `/Data/`, so place the downloaded files there (or mount the folder at `/Data`, e.g. `docker run -v "$PWD/Data:/Data" ...`):
 
 ```text
-.
-├── Figures_FitnessValue.R
-├── README.md
-└── Data/
-    ├── *.csv, *.tsv, *.Rtab, *.fa    # tables listed below
-    ├── conditions/plate_tr_1-4.tsv   # plate layouts
-    └── *.zip                         # unzip before running
+/Data/
+├── *.csv, *.tsv, *.Rtab, *.fa    # tables listed below
+├── conditions/plate_tr_1-4.tsv   # move the four plate_tr_*.tsv files here
+└── *.zip                         # unzip before running
 ```
 
 ```bash
-cd Data && for z in *.zip; do unzip -q "$z"; done && cd ..
-Rscript Figures_FitnessValue.R
+cd /Data && mkdir -p conditions && mv plate_tr_*.tsv conditions/
+for z in *.zip; do unzip -q "$z"; done
+Rscript /path/to/repo/OriginalAnalysis/Figures_FitnessValue.R
 ```
 
 ### Data files
@@ -229,7 +225,7 @@ Place the revised dataset in `OriginalData/` and extract all `Revision_*.zip` fi
     └── Plasmid_analysis/
 ```
 
-Each analysis folder has one script (named after the folder), an `input/` and an `output/` folder. Run from the project root:
+Each analysis folder has one script named after the folder, an `output/` folder and, where needed, an `input/` folder. Run from the project root:
 
 ```bash
 Rscript Revision/Plasmid_analysis/Plasmid_analysis.R
@@ -239,20 +235,17 @@ Required R packages: `tidyverse`, `patchwork`, `scales`, `ragg`, `broom`, `fixes
 
 ### Analyses
 
-| Folder | Analysis |
-|---|---|
-| `Phylogenetic_tree` | Phylogeny annotated with ST, resistance and virulence (Figure S1) |
-| `Clonality_analysis` | Genomic vs phenotypic similarity; GWAS robustness to clone pruning |
-| `EdgeEffect_analysis` | Plate edge-effect correction and its effect on GWAS (Figure S15) |
-| `Opacity_analysis` | ST and capsule effects on colony area vs opacity |
-| `Opacity_ST23` | Size–opacity concordance and ST23 deviation |
-| `Overfitting_analysis` | Train–test gaps and feature counts of the fitness models |
-| `Plasmid_analysis` | Replicon vs cargo fitness effects (LMMs, matching, ONT linkage, copy number) |
+| Folder | Analysis | Inputs | Main outputs |
+|---|---|---|---|
+| `Phylogenetic_tree` | Phylogeny annotated with ST, resistance and virulence | `aln_snps.tree` | `Figure_S1_*` panels, rooted trees (`.nwk`) |
+| `Clonality_analysis` | Genomic vs phenotypic similarity; GWAS robustness to clone pruning | SNP distances, full and clone-pruned GWAS results | `phenotypic_similarity/`, `clone_pruning_comparison_0.001/` and `_010/` |
+| `EdgeEffect_analysis` | Plate edge-effect correction and its effect on GWAS | pyseer results (`input/pyseer/original/`, `spatial/`, one file per condition) | corrected fitness, `spatial_sensitivity.csv`, `Figure_S15_GWAS_spatial_concordance` |
+| `Opacity_analysis` | ST and capsule effects on colony area vs opacity | `supp_table_S2.csv` | `ST_capsule_*.csv`, `Figure_Sy_Virulence_Coefficient_Sensitivity` |
+| `Opacity_ST23` | Size–opacity concordance and ST23 deviation | `Shared_input/` only | `Figure_ST23_Size_Opacity_Concordance`, concordance tables |
+| `Overfitting_analysis` | Train–test gaps and feature counts of the fitness models | `feature_counts_aggregated.csv` | `FigureS10_Overfitting_FeatureCounts_SD` |
+| `Plasmid_analysis` | Replicon vs cargo fitness effects (LMMs, matching, ONT linkage, copy number) | LMM, matching, copy-number and ONT results | `Figure_S1_LMM` … `Figure_S10_*`, `Table_S*` and `Table_LMM_*` |
 
-### Known gaps
-
-- `Clonality_analysis`: the SNP-distance interval part is incomplete (code for binning pairs is missing).
-- `Plasmid_analysis/output/additional/`: tables made by code not included.
+All analyses except `Plasmid_analysis` also read the revised dataset in `OriginalData/`; inputs used by several analyses are in `Revision/Shared_input/`. `Plasmid_analysis/output/additional/` holds tables produced by code that is not included.
 
 ---
 
