@@ -1,1 +1,7 @@
 .DS_Store
+
+# Zenodo data download (doi:10.5281/zenodo.19931379)
+Data/
+Data_clean/
+OriginalData/
+OriginalData_build/
