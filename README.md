@@ -235,17 +235,31 @@ Required R packages: `tidyverse`, `patchwork`, `scales`, `ragg`, `broom`, `fixes
 
 ### Analyses
 
-| Folder | Analysis | Inputs | Main outputs |
-|---|---|---|---|
-| `Phylogenetic_tree` | Phylogeny annotated with ST, resistance and virulence | `aln_snps.tree` | `Figure_S1_*` panels, rooted trees (`.nwk`) |
-| `Clonality_analysis` | Genomic vs phenotypic similarity; GWAS robustness to clone pruning | SNP distances, full and clone-pruned GWAS results | `phenotypic_similarity/`, `clone_pruning_comparison_0.001/` and `_010/` |
-| `EdgeEffect_analysis` | Plate edge-effect correction and its effect on GWAS | pyseer results (`input/pyseer/original/`, `spatial/`, one file per condition) | corrected fitness, `spatial_sensitivity.csv`, `Figure_S15_GWAS_spatial_concordance` |
-| `Opacity_analysis` | ST and capsule effects on colony area vs opacity | `supp_table_S2.csv` | `ST_capsule_*.csv`, `Figure_Sy_Virulence_Coefficient_Sensitivity` |
-| `Opacity_ST23` | Size–opacity concordance and ST23 deviation | `Shared_input/` only | `Figure_ST23_Size_Opacity_Concordance`, concordance tables |
-| `Overfitting_analysis` | Train–test gaps and feature counts of the fitness models | `feature_counts_aggregated.csv` | `FigureS10_Overfitting_FeatureCounts_SD` |
-| `Plasmid_analysis` | Replicon vs cargo fitness effects (LMMs, matching, ONT linkage, copy number) | LMM, matching, copy-number and ONT results | `Figure_S1_LMM` … `Figure_S10_*`, `Table_S*` and `Table_LMM_*` |
+| Folder | Analysis | Main outputs |
+|---|---|---|
+| `Phylogenetic_tree` | Phylogeny annotated with ST, resistance and virulence | `Figure_S1_*` panels, rooted trees (`.nwk`) |
+| `Clonality_analysis` | Genomic vs phenotypic similarity; GWAS robustness to clone pruning | `phenotypic_similarity/`, `clone_pruning_comparison_0.001/` and `_010/` |
+| `EdgeEffect_analysis` | Plate edge-effect correction and its effect on GWAS | corrected fitness, `spatial_sensitivity.csv`, `Figure_S15_GWAS_spatial_concordance` |
+| `Opacity_analysis` | ST and capsule effects on colony area vs opacity | `ST_capsule_*.csv`, `Figure_Sy_Virulence_Coefficient_Sensitivity` |
+| `Opacity_ST23` | Size–opacity concordance and ST23 deviation | `Figure_ST23_Size_Opacity_Concordance`, concordance tables |
+| `Overfitting_analysis` | Train–test gaps and feature counts of the fitness models | `FigureS10_Overfitting_FeatureCounts_SD` |
+| `Plasmid_analysis` | Replicon vs cargo fitness effects (LMMs, matching, ONT linkage, copy number) | `Figure_S1_LMM` … `Figure_S10_*`, `Table_S*` and `Table_LMM_*` |
 
-All analyses except `Plasmid_analysis` also read the revised dataset in `OriginalData/`. `Plasmid_analysis/output/additional/` holds tables produced by code that is not included.
+`Plasmid_analysis/output/additional/` holds tables produced by code that is not included.
+
+### Input files
+
+| Analysis | Own `input/` | `Shared_input/` | `OriginalData/` |
+|---|---|---|---|
+| `Phylogenetic_tree` | `aln_snps.tree` | — | `tot_results.tsv` |
+| `Clonality_analysis` | `pairwise_snp_distances_fixed.tsv`, `merged_gene_gwas_results.csv`, `merged_scoary_results_0.001.csv`, `merged_scoary_results_010.csv` | — | `absolute_fitness_ML.csv` |
+| `EdgeEffect_analysis` | `pyseer/original/*.tsv`, `pyseer/spatial/*.tsv` (one per condition) | — | `assay_results_full.zip`, `plate_tr_1.tsv` … `plate_tr_4.tsv` |
+| `Opacity_analysis` | `supp_table_S2.csv` | `Opacity_all_conditions_traits.csv` | `absolute_fitness_ML.csv` |
+| `Opacity_ST23` | — | `Opacity_all_conditions_traits.csv`, `all_models_mean_sd_five_runs.csv` | `absolute_fitness_ML.csv`, `tot_results.tsv`, `condition_group.csv` |
+| `Overfitting_analysis` | `feature_counts_aggregated.csv` | `all_models_mean_sd_five_runs.csv` | `condition_group.csv` |
+| `Plasmid_analysis` | `LMM_all_results.csv`, `replicon_VIF.csv`, `replicon_cargo_cooccurrence.csv`, `plasmid_best_hits_with_Kleborate.tsv`, `copy_number/copy_number_data.csv`, `copy_number/copy_number_fitness_associations.csv`, `within_ST_matching/cargo_balance.csv`, `within_ST_matching/matched_fitness_results.csv`, `within_ST_matching/matching_diagnostics.csv` | — | — |
+
+The revision scripts use 8 of the 25 `OriginalData/` files; the others are the full dataset behind the original analysis.
 
 `Revision/Shared_input/` holds inputs used by more than one analysis:
 
