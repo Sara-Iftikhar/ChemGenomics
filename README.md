@@ -249,15 +249,31 @@ Required R packages: `tidyverse`, `patchwork`, `scales`, `ragg`, `broom`, `fixes
 
 ### Input files
 
-| Analysis | Own `input/` | `Shared_input/` | `OriginalData/` |
-|---|---|---|---|
-| `Phylogenetic_tree` | `aln_snps.tree` | — | `tot_results.tsv` |
-| `Clonality_analysis` | `pairwise_snp_distances_fixed.tsv`, `merged_gene_gwas_results.csv`, `merged_scoary_results_0.001.csv`, `merged_scoary_results_010.csv` | — | `absolute_fitness_ML.csv` |
-| `EdgeEffect_analysis` | `pyseer/original/*.tsv`, `pyseer/spatial/*.tsv` (one per condition) | — | `assay_results_full.zip`, `plate_tr_1.tsv` … `plate_tr_4.tsv` |
-| `Opacity_analysis` | `supp_table_S2.csv` | `Opacity_all_conditions_traits.csv` | `absolute_fitness_ML.csv` |
-| `Opacity_ST23` | — | `Opacity_all_conditions_traits.csv`, `all_models_mean_sd_five_runs.csv` | `absolute_fitness_ML.csv`, `tot_results.tsv`, `condition_group.csv` |
-| `Overfitting_analysis` | `feature_counts_aggregated.csv` | `all_models_mean_sd_five_runs.csv` | `condition_group.csv` |
-| `Plasmid_analysis` | `LMM_all_results.csv`, `replicon_VIF.csv`, `replicon_cargo_cooccurrence.csv`, `plasmid_best_hits_with_Kleborate.tsv`, `copy_number/copy_number_data.csv`, `copy_number/copy_number_fitness_associations.csv`, `within_ST_matching/cargo_balance.csv`, `within_ST_matching/matched_fitness_results.csv`, `within_ST_matching/matching_diagnostics.csv` | — | — |
+Files in each analysis's own `input/` folder (the bold rows list the shared and `OriginalData/` files it also reads):
+
+| File | Description |
+|---|---|
+| **`Phylogenetic_tree`** | *also reads `OriginalData/tot_results.tsv`* |
+| `aln_snps.tree` | FastTree phylogeny of the 1,462 isolates from the core-SNP alignment |
+| **`Clonality_analysis`** | *also reads `OriginalData/absolute_fitness_ML.csv`* |
+| `pairwise_snp_distances_fixed.tsv` | Pairwise SNP distances between all isolates |
+| `merged_gene_gwas_results.csv` | Pan-genome GWAS (Scoary) results per condition, all isolates |
+| `merged_scoary_results_0.001.csv`, `merged_scoary_results_010.csv` | The same GWAS after clone pruning at thresholds 0.001 and 0.10 (10 replicates each) |
+| **`EdgeEffect_analysis`** | *also reads `OriginalData/assay_results_full.zip` and `plate_tr_1–4.tsv`* |
+| `pyseer/original/`, `pyseer/spatial/` | pyseer GWAS per condition on original and spatially corrected fitness |
+| **`Opacity_analysis`** | *also reads `Shared_input/Opacity_all_conditions_traits.csv`, `OriginalData/absolute_fitness_ML.csv`* |
+| `supp_table_S2.csv` | Supplementary Table S2: Kleborate genotypes per isolate (ST, K/O locus, virulence and resistance scores) |
+| **`Opacity_ST23`** | *reads only shared files: `Shared_input/Opacity_all_conditions_traits.csv`, `all_models_mean_sd_five_runs.csv`; `OriginalData/absolute_fitness_ML.csv`, `tot_results.tsv`, `condition_group.csv`* |
+| **`Overfitting_analysis`** | *also reads `Shared_input/all_models_mean_sd_five_runs.csv`, `OriginalData/condition_group.csv`* |
+| `feature_counts_aggregated.csv` | Number of pan-genome, SNP and unitig features selected per condition (mean ± SD over five runs) |
+| **`Plasmid_analysis`** | *reads only its own inputs* |
+| `LMM_all_results.csv` | LMM estimates per condition × replicon under each model |
+| `replicon_VIF.csv` | Collinearity (VIF) between each replicon and the cargo genes |
+| `replicon_cargo_cooccurrence.csv` | How often each replicon and cargo gene occur in the same isolate |
+| `plasmid_best_hits_with_Kleborate.tsv` | ONT plasmid contigs with replicon hits and Kleborate cargo calls |
+| `copy_number/copy_number_data.csv` | Plasmid copy number per isolate and replicon |
+| `copy_number/copy_number_fitness_associations.csv` | Correlation between copy number and fitness per condition |
+| `within_ST_matching/*.csv` | Within-ST propensity-score matching: matched fitness differences, diagnostics, covariate balance |
 
 The revision scripts use 8 of the 25 `OriginalData/` files; the others are the full dataset behind the original analysis.
 
