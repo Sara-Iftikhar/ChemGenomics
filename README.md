@@ -245,7 +245,14 @@ Required R packages: `tidyverse`, `patchwork`, `scales`, `ragg`, `broom`, `fixes
 | `Overfitting_analysis` | Train–test gaps and feature counts of the fitness models | `feature_counts_aggregated.csv` | `FigureS10_Overfitting_FeatureCounts_SD` |
 | `Plasmid_analysis` | Replicon vs cargo fitness effects (LMMs, matching, ONT linkage, copy number) | LMM, matching, copy-number and ONT results | `Figure_S1_LMM` … `Figure_S10_*`, `Table_S*` and `Table_LMM_*` |
 
-All analyses except `Plasmid_analysis` also read the revised dataset in `OriginalData/`; inputs used by several analyses are in `Revision/Shared_input/`. `Plasmid_analysis/output/additional/` holds tables produced by code that is not included.
+All analyses except `Plasmid_analysis` also read the revised dataset in `OriginalData/`. `Plasmid_analysis/output/additional/` holds tables produced by code that is not included.
+
+`Revision/Shared_input/` holds inputs used by more than one analysis:
+
+| File | Contents | Used by |
+|---|---|---|
+| `Opacity_all_conditions_traits.csv` | Colony opacity per isolate and condition | `Opacity_analysis`, `Opacity_ST23` |
+| `all_models_mean_sd_five_runs.csv` | Fitness-prediction model performance (mean ± SD over five runs) per condition | `Overfitting_analysis`, `Opacity_ST23` |
 
 ---
 
