@@ -219,7 +219,6 @@ Place the revised dataset in `OriginalData/` and extract all `Revision_*.zip` fi
     ├── Clonality_analysis/
     ├── EdgeEffect_analysis/
     ├── Opacity_analysis/
-    ├── Opacity_ST23/
     ├── Overfitting_analysis/
     ├── Phylogenetic_tree/
     └── Plasmid_analysis/
@@ -240,8 +239,7 @@ Required R packages: `tidyverse`, `patchwork`, `scales`, `ragg`, `broom`, `fixes
 | `Phylogenetic_tree` | Phylogeny annotated with ST, resistance and virulence | `Figure_S1_*` panels, rooted trees (`.nwk`) |
 | `Clonality_analysis` | Genomic vs phenotypic similarity; GWAS robustness to clone pruning | `phenotypic_similarity/`, `clone_pruning_comparison_0.001/` and `_010/` |
 | `EdgeEffect_analysis` | Plate edge-effect correction and its effect on GWAS | corrected fitness, `spatial_sensitivity.csv`, `Figure_S15_GWAS_spatial_concordance` |
-| `Opacity_analysis` | ST and capsule effects on colony area vs opacity | `ST_capsule_*.csv`, `Figure_Sy_Virulence_Coefficient_Sensitivity` |
-| `Opacity_ST23` | Size–opacity concordance and ST23 deviation | `Figure_ST23_Size_Opacity_Concordance`, concordance tables |
+| `Opacity_analysis` | (A) ST and capsule effects on colony area vs opacity; (B) size–opacity concordance and ST23 deviation | `ST_capsule_*.csv`, `Figure_Sy_Virulence_Coefficient_Sensitivity`, `Figure_ST23_Size_Opacity_Concordance`, concordance tables |
 | `Overfitting_analysis` | Train–test gaps and feature counts of the fitness models | `FigureS10_Overfitting_FeatureCounts_SD` |
 | `Plasmid_analysis` | Replicon vs cargo fitness effects (LMMs, matching, ONT linkage, copy number) | `Figure_S1_LMM` … `Figure_S10_*`, `Table_S*` and `Table_LMM_*` |
 
@@ -261,9 +259,9 @@ Files in each analysis's own `input/` folder (the bold rows list the shared and 
 | `merged_scoary_results_0.001.csv`, `merged_scoary_results_010.csv` | The same GWAS after clone pruning at thresholds 0.001 and 0.10 (10 replicates each) |
 | **`EdgeEffect_analysis`** | *also reads `OriginalData/assay_results_full.zip` and `plate_tr_1–4.tsv`* |
 | `pyseer/original/`, `pyseer/spatial/` | pyseer GWAS per condition on original and spatially corrected fitness |
-| **`Opacity_analysis`** | *also reads `Shared_input/Opacity_all_conditions_traits.csv`, `OriginalData/absolute_fitness_ML.csv`* |
+| **`Opacity_analysis`** | *also reads `Shared_input/all_models_mean_sd_five_runs.csv`; `OriginalData/absolute_fitness_ML.csv`, `tot_results.tsv`, `condition_group.csv`* |
 | `supp_table_S2.csv` | Supplementary Table S2: Kleborate genotypes per isolate (ST, K/O locus, virulence and resistance scores) |
-| **`Opacity_ST23`** | *reads only shared files: `Shared_input/Opacity_all_conditions_traits.csv`, `all_models_mean_sd_five_runs.csv`; `OriginalData/absolute_fitness_ML.csv`, `tot_results.tsv`, `condition_group.csv`* |
+| `Opacity_all_conditions_traits.csv` | Colony opacity per isolate and condition |
 | **`Overfitting_analysis`** | *also reads `Shared_input/all_models_mean_sd_five_runs.csv`, `OriginalData/condition_group.csv`* |
 | `feature_counts_aggregated.csv` | Number of pan-genome, SNP and unitig features selected per condition (mean ± SD over five runs) |
 | **`Plasmid_analysis`** | *reads only its own inputs* |
@@ -277,20 +275,19 @@ Files in each analysis's own `input/` folder (the bold rows list the shared and 
 
 The revision scripts use 8 of the 25 `OriginalData/` files; the others are the full dataset behind the original analysis.
 
-`Revision/Shared_input/` holds inputs used by more than one analysis:
+`Revision/Shared_input/` holds the input used by more than one analysis:
 
 | File | Contents | Used by |
 |---|---|---|
-| `Opacity_all_conditions_traits.csv` | Colony opacity per isolate and condition | `Opacity_analysis`, `Opacity_ST23` |
-| `all_models_mean_sd_five_runs.csv` | Fitness-prediction model performance (mean ± SD over five runs) per condition | `Overfitting_analysis`, `Opacity_ST23` |
+| `all_models_mean_sd_five_runs.csv` | Fitness-prediction model performance (mean ± SD over five runs) per condition | `Overfitting_analysis`, `Opacity_analysis` |
 
 ---
 
 ## Contact
 
-This is a joint project developed by the **[Infectious Disease Epidemiology Lab](https://ide.kaust.edu.sa/) (KAUST)** and the **Banzhaf Lab (Newcastle University)**.
+For questions, issues, or collaboration, please contact:
 
 | Name | Role | Email |
 |---|---|---|
-| Danesh Moradigaravand | PI, KAUST | danesh.moradigaravand@kaust.edu.sa |
-| Manuel Banzhaf | PI, Newcastle University | manuel.banzhaf@newcastle.ac.uk |
+| Ge Zhou | PhD Student, KAUST | ge.zhou@kaust.edu.sa |
+| Sara Iftikhar | Research Assistant, KAUST | sara.iftikhar@kaust.edu.sa |
