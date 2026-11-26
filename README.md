@@ -215,11 +215,12 @@ Place the revised dataset in `OriginalData/` and extract all `Revision_*.zip` fi
 .
 ├── OriginalData/
 └── Revision/
-    ├── Shared_input/          # inputs used by several analyses
     ├── Clonality_analysis/
     ├── EdgeEffect_analysis/
+    ├── ML_analysis/
     ├── Opacity_analysis/
     ├── Overfitting_analysis/
+    ├── Pangenome_genomic_context/
     ├── Phylogenetic_tree/
     └── Plasmid_analysis/
 ```
@@ -239,11 +240,13 @@ Required R packages: `tidyverse`, `patchwork`, `scales`, `ragg`, `broom`, `fixes
 | `Phylogenetic_tree` | Phylogeny annotated with ST, resistance and virulence | `Figure_S1_*` panels, rooted trees (`.nwk`) |
 | `Clonality_analysis` | Genomic vs phenotypic similarity; GWAS robustness to clone pruning | `phenotypic_similarity/`, `clone_pruning_comparison_0.001/` and `_010/` |
 | `EdgeEffect_analysis` | Plate edge-effect correction and its effect on GWAS | corrected fitness, `spatial_sensitivity.csv`, `Figure_S15_GWAS_spatial_concordance` |
+| `Pangenome_genomic_context` | Genomic context of pangenome genes: chromosomal or plasmid location of each gene, inferred from long-read assemblies of 175 isolates | `combined_blast_results_annotated.tsv`: BLAST hits of pangenome genes against chromosomal and plasmid fragments, with location (chromosome or plasmid) and plasmid replicon per hit |
+| `ML_analysis` | Performance of the fitness-prediction models across models, feature sets and condition categories | `Figure5B_*`, `Figure5C_*`, `FigureS9_*`, `Manuscript_*.csv` summary tables |
 | `Opacity_analysis` | (A) ST and capsule effects on colony area vs opacity; (B) size–opacity concordance and ST23 deviation | `ST_capsule_*.csv`, `Figure_Sy_Virulence_Coefficient_Sensitivity`, `Figure_ST23_Size_Opacity_Concordance`, concordance tables |
 | `Overfitting_analysis` | Train–test gaps and feature counts of the fitness models | `FigureS10_Overfitting_FeatureCounts_SD` |
 | `Plasmid_analysis` | Replicon vs cargo fitness effects (LMMs, matching, ONT linkage, copy number) | `Figure_S1_LMM` … `Figure_S10_*`, `Table_S*` and `Table_LMM_*` |
 
-`Plasmid_analysis/output/additional/` holds tables produced by code that is not included.
+`Plasmid_analysis/output/additional/` holds tables produced by code that is not included. `Pangenome_genomic_context` provides its main output only; the BLAST and annotation steps that produced it are not included. The table contains all qualifying alignments (≥95% identity, ≥90% query coverage); selecting the best alignment per gene and genome is not included.
 
 ### Input files
 
@@ -259,10 +262,12 @@ Files in each analysis's own `input/` folder (the bold rows list the shared and 
 | `merged_scoary_results_0.001.csv`, `merged_scoary_results_010.csv` | The same GWAS after clone pruning at thresholds 0.001 and 0.10 (10 replicates each) |
 | **`EdgeEffect_analysis`** | *also reads `OriginalData/assay_results_full.zip` and `plate_tr_1–4.tsv`* |
 | `pyseer/original/`, `pyseer/spatial/` | pyseer GWAS per condition on original and spatially corrected fitness |
-| **`Opacity_analysis`** | *also reads `Shared_input/all_models_mean_sd_five_runs.csv`; `OriginalData/absolute_fitness_ML.csv`, `tot_results.tsv`, `condition_group.csv`* |
+| **`ML_analysis`** | *also reads `OriginalData/absolute_fitness_ML.csv`, `condition_group.csv`* |
+| `all_runs_combined.csv` | Per-run ML results (five runs) for every condition, model, feature set and split; Part 1 averages these into `output/all_models_mean_sd_five_runs.csv` (model performance, mean ± SD over five runs, per condition), which Part 2 and the Opacity and Overfitting analyses use |
+| **`Opacity_analysis`** | *also reads `ML_analysis/output/all_models_mean_sd_five_runs.csv`; `OriginalData/absolute_fitness_ML.csv`, `tot_results.tsv`, `condition_group.csv`* |
 | `supp_table_S2.csv` | Supplementary Table S2: Kleborate genotypes per isolate (ST, K/O locus, virulence and resistance scores) |
 | `Opacity_all_conditions_traits.csv` | Colony opacity per isolate and condition |
-| **`Overfitting_analysis`** | *also reads `Shared_input/all_models_mean_sd_five_runs.csv`, `OriginalData/condition_group.csv`* |
+| **`Overfitting_analysis`** | *also reads `ML_analysis/output/all_models_mean_sd_five_runs.csv`, `OriginalData/condition_group.csv`* |
 | `feature_counts_aggregated.csv` | Number of pan-genome, SNP and unitig features selected per condition (mean ± SD over five runs) |
 | **`Plasmid_analysis`** | *reads only its own inputs* |
 | `LMM_all_results.csv` | LMM estimates per condition × replicon under each model |
@@ -275,11 +280,7 @@ Files in each analysis's own `input/` folder (the bold rows list the shared and 
 
 The revision scripts use 8 of the 25 `OriginalData/` files; the others are the full dataset behind the original analysis.
 
-`Revision/Shared_input/` holds the input used by more than one analysis:
-
-| File | Contents | Used by |
-|---|---|---|
-| `all_models_mean_sd_five_runs.csv` | Fitness-prediction model performance (mean ± SD over five runs) per condition | `Overfitting_analysis`, `Opacity_analysis` |
+Run `ML_analysis` before `Opacity_analysis` and `Overfitting_analysis`, which use its output `all_models_mean_sd_five_runs.csv`.
 
 ---
 
