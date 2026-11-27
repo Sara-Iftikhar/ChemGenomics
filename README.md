@@ -238,13 +238,13 @@ Required R packages: `tidyverse`, `patchwork`, `scales`, `ragg`, `broom`, `fixes
 | Folder | Analysis | Main outputs |
 |---|---|---|
 | `Phylogenetic_tree` | Phylogeny annotated with ST, resistance and virulence | `FigureS3A_*` panels (Figure S3A), rooted trees (`.nwk`) |
-| `Clonality_analysis` | Genomic vs phenotypic similarity, including by SNP-distance interval (Figure S3B); GWAS robustness to clone pruning | `phenotypic_similarity/` (incl. `FigureS3B_Phenotypic_similarity_by_SNP_interval`), `clone_pruning_comparison_0.001/` and `_010/` |
+| `Clonality_analysis` | Genomic vs phenotypic similarity, including by SNP-distance interval (Figure S3B); GWAS robustness to clone pruning | `phenotypic_similarity/` (incl. `FigureS3B_*`), `clone_pruning_comparison_0.001/` and `_010/` |
 | `EdgeEffect_analysis` | Plate edge-effect correction and its effect on GWAS | corrected fitness, `spatial_sensitivity.csv`, `GWAS_spatial_concordance` |
-| `Pangenome_genomic_context` | Genomic context of pan-genome genes: chromosomal or plasmid location of each gene, inferred from long-read assemblies of 175 isolates | `combined_blast_results_annotated.tsv`: BLAST hits of pan-genome genes against chromosomal and plasmid fragments, with location (chromosome or plasmid) and plasmid replicon per hit |
+| `Pangenome_genomic_context` | Genomic context of pan-genome genes: chromosomal or plasmid location of each gene, inferred from long-read assemblies of 175 isolates | `combined_blast_results_annotated.tsv`<br>BLAST hits of pan-genome genes against chromosomal and plasmid fragments, with location (chromosome or plasmid) and plasmid replicon per hit |
 | `ML_analysis` | Performance of the fitness-prediction models across models, feature sets and condition categories | `Figure5B_*`, `Figure5C_*`, `FigureS9_*`, `Manuscript_*.csv` summary tables |
-| `Opacity_analysis` | (A) ST and capsule effects on colony area vs opacity; (B) size–opacity concordance and ST23 deviation | `TableS3_*.csv` (Table S3), `ST_capsule_all_results.csv`, `Virulence_Coefficient_Sensitivity`, `FigureS4_ST23_Size_Opacity_Concordance` (Figure S4), concordance tables |
+| `Opacity_analysis` | (A) ST and capsule effects on colony area vs opacity; (B) size–opacity concordance and ST23 deviation | `TableS3_*` (Table S3), `FigureS4_*` (Figure S4), ST/capsule results, concordance tables |
 | `Overfitting_analysis` | Train–test gaps and feature counts of the fitness models | `FigureS10A_*` (Figure S10A) |
-| `Plasmid_analysis` | Replicon vs cargo fitness effects (LMMs, matching, ONT linkage, copy number) | `FigureS6_Replicon_fitness_and_cargo` (Figure S6), `TableS4_Replicon_cargo_copy_number.csv` (Table S4), supporting `Figure_*` and `Table_*` files |
+| `Plasmid_analysis` | Replicon vs cargo fitness effects (LMMs, matching, ONT linkage, copy number) | `FigureS6_*` (Figure S6), `TableS4_*` (Table S4), supporting `Figure_*` and `Table_*` files |
 
 `Plasmid_analysis/output/additional/` holds tables produced by code that is not included. `Pangenome_genomic_context` provides its main output only; the BLAST and annotation steps that produced it are not included. The table contains all qualifying alignments (≥95% identity, ≥90% query coverage); selecting the best alignment per gene and genome is not included.
 
@@ -254,31 +254,30 @@ Files in each analysis's own `input/` folder (the bold rows list other analysis 
 
 | File | Description |
 |---|---|
-| **`Phylogenetic_tree`** | *also reads `OriginalData/tot_results.tsv`* |
+| **`Phylogenetic_tree`** | *also reads `tot_results.tsv` from `OriginalData/`* |
 | `aln_snps.tree` | FastTree phylogeny of the 1,462 isolates from the core-SNP alignment |
-| **`Clonality_analysis`** | *also reads `OriginalData/absolute_fitness_ML.csv`* |
+| **`Clonality_analysis`** | *also reads `absolute_fitness_ML.csv` from `OriginalData/`* |
 | `pairwise_snp_distances_fixed.tsv` | Pairwise SNP distances between all isolates |
 | `merged_gene_gwas_results.csv` | Pan-genome GWAS (Scoary) results per condition, all isolates |
-| `merged_scoary_results_0.001.csv`, `merged_scoary_results_010.csv` | The same GWAS after clone pruning at thresholds 0.001 and 0.10 (10 replicates each) |
-| **`EdgeEffect_analysis`** | *also reads `OriginalData/assay_results_full.zip` and `plate_tr_1-4.tsv`* |
+| `merged_scoary_results_0.001.csv` | The same GWAS after clone pruning at threshold 0.001 (10 replicates) |
+| `merged_scoary_results_010.csv` | The same GWAS after clone pruning at threshold 0.10 (10 replicates) |
+| **`EdgeEffect_analysis`** | *also reads `assay_results_full.zip` and `plate_tr_1-4.tsv` from `OriginalData/`* |
 | `pyseer/original/`, `pyseer/spatial/` | pyseer GWAS per condition on original and spatially corrected fitness |
-| **`ML_analysis`** | *also reads `OriginalData/absolute_fitness_ML.csv`, `condition_group.csv`* |
-| `all_runs_combined.csv` | Per-run ML results (five runs) for every condition, model, feature set and split; Part 1 averages these into `output/all_models_mean_sd_five_runs.csv` (model performance, mean ± SD over five runs, per condition), which Part 2 and the Opacity and Overfitting analyses use |
-| **`Opacity_analysis`** | *also reads `ML_analysis/output/all_models_mean_sd_five_runs.csv`; `OriginalData/absolute_fitness_ML.csv`, `tot_results.tsv`, `condition_group.csv`* |
+| **`ML_analysis`** | *also reads `absolute_fitness_ML.csv` and `condition_group.csv` from `OriginalData/`* |
+| `all_runs_combined.csv` | Per-run ML results (five runs) for every condition, model, feature set and split; Part 1 averages these into `all_models_mean_sd_five_runs.csv` in `output/` (model performance, mean ± SD over five runs, per condition), which Part 2 and the Opacity and Overfitting analyses use |
+| **`Opacity_analysis`** | *also reads `all_models_mean_sd_five_runs.csv` from `ML_analysis`, and `absolute_fitness_ML.csv`, `tot_results.tsv`, `condition_group.csv` from `OriginalData/`* |
 | `supp_table_S2.csv` | Supplementary Table S2: Kleborate genotypes per isolate (ST, K/O locus, virulence and resistance scores) |
 | `Opacity_all_conditions_traits.csv` | Colony opacity per isolate and condition |
-| **`Overfitting_analysis`** | *also reads `ML_analysis/output/all_models_mean_sd_five_runs.csv`, `OriginalData/condition_group.csv`* |
+| **`Overfitting_analysis`** | *also reads `all_models_mean_sd_five_runs.csv` from `ML_analysis`, and `condition_group.csv` from `OriginalData/`* |
 | `feature_counts_aggregated.csv` | Number of pan-genome, SNP and unitig features selected per condition (mean ± SD over five runs) |
 | **`Plasmid_analysis`** | *reads only its own inputs* |
 | `LMM_all_results.csv` | LMM estimates per condition × replicon under each model |
 | `replicon_VIF.csv` | Collinearity (VIF) between each replicon and the cargo genes |
 | `replicon_cargo_cooccurrence.csv` | How often each replicon and cargo gene occur in the same isolate |
 | `plasmid_best_hits_with_Kleborate.csv` | Long-read contigs carrying a plasmid replicon, with replicon hit and Kleborate cargo calls; the `Type` column marks plasmids (509) and chromosomes (2) |
-| `copy_number/copy_number_data.csv` | Plasmid copy number per isolate and replicon |
-| `copy_number/copy_number_fitness_associations.csv` | Correlation between copy number and fitness per condition |
-| `within_ST_matching/*.csv` | Within-ST propensity-score matching: matched fitness differences, diagnostics, covariate balance |
-
-The revision scripts use 8 of the 25 `OriginalData/` files; the others are the full dataset behind the original analysis.
+| `copy_number_data.csv` | Plasmid copy number per isolate and replicon (in `copy_number/`) |
+| `copy_number_fitness_associations.csv` | Correlation between copy number and fitness per condition (in `copy_number/`) |
+| `within_ST_matching/` | Within-ST propensity-score matching: matched fitness differences, diagnostics, covariate balance |
 
 Run `ML_analysis` before `Opacity_analysis` and `Overfitting_analysis`, which use its output `all_models_mean_sd_five_runs.csv`.
 
