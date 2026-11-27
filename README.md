@@ -17,7 +17,7 @@ This repository contains code and tools for high-throughput chemical genomics sc
 
 ## IRIS Processed Files
 
-The `iris_processed_file/` directory contains corrected IRIS colony assay files (`*_modified.iris`). Raw IRIS measurements record zero-size colonies that may represent poor growth, normal growth, over growth rather than true absences. Each zero-size colony was manually reviewed and reclassified before being written back into the corrected `_modified.iris` files used for downstream fitness analysis.
+The `iris_processed_file/` directory contains corrected IRIS colony assay files (`*_modified.iris`). Raw IRIS measurements record zero-size colonies that may represent poor growth, normal growth, or overgrowth rather than true absences. Each zero-size colony was manually reviewed and reclassified before being written back into the corrected `_modified.iris` files used for downstream fitness analysis.
 
 ---
 
@@ -63,7 +63,7 @@ Rscript /path/to/repo/OriginalAnalysis/Figures_FitnessValue.R
 | `SHAP_important_features.csv` | SHAP-based feature importance from ML models |
 | `SNP_GWAS_annot.csv` | Annotation table for SNP GWAS hits |
 | `summary_ARG.tsv` | ARG/plasmid annotation summary |
-| `total_distance_matrix.csv` | Pairwise distance matrix for clustering and visualisation |
+| `total_distance_matrix.csv` | Pairwise distance matrix for clustering and visualization |
 | `tot_results.tsv` | Combined results table for downstream analysis |
 | `conditions/` | Plate-layout files mapping colony positions to isolate identifiers |
 | `assay_results_full.zip` | Raw IRIS colony assay result files |
@@ -86,7 +86,7 @@ fitness-predictor/
 ├── requirements.txt            # Pip dependencies
 ├── pan_genome_reference.fa     # BLAST reference (pan-genome genes)
 ├── gene_annotations.csv        # Gene annotations (used by --explain)
-└── models/                     # 160 trained NGBoost models (.joblib)
+└── models.tar.gz               # Archive of 160 trained NGBoost models (extracts to models/*.joblib)
 ```
 
 ### Installation
@@ -135,16 +135,16 @@ docker pull gzhoubioinf09/fitness-predictor:v0.2.0
 docker run --rm gzhoubioinf09/fitness-predictor:v0.2.0 --list
 
 # Predict fitness (e.g. condition=Doripenem0125ugml, FASTA in current directory)
-docker run --rm -v $(pwd):/data gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta
+docker run --rm -v "$(pwd):/data" gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta
 
 # Custom BLAST thresholds
-docker run --rm -v $(pwd):/data gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta --identity 80 --coverage 60
+docker run --rm -v "$(pwd):/data" gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta --identity 80 --coverage 60
 
 # SHAP explanation
-docker run --rm -v $(pwd):/data gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta --explain
+docker run --rm -v "$(pwd):/data" gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta --explain
 
 # SHAP explanation with top 30 genes
-docker run --rm -v $(pwd):/data gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta --explain --top-n 30
+docker run --rm -v "$(pwd):/data" gzhoubioinf09/fitness-predictor:v0.2.0 -c <condition> -p /data/genome.fasta --explain --top-n 30
 ```
 
 ### Output
@@ -163,12 +163,12 @@ Result saved   : genome_Doripenem0125ugml_prediction.csv
 - **Fitness ≈ 1** — strain grows at the median rate
 - **Fitness < 1** — strain grows worse than the median strain on the plate
 
-Two CSV files are saved:
+Up to two CSV files are saved alongside the input FASTA:
 
 | File | Contents |
 |---|---|
 | `genome_<condition>_prediction.csv` | One-row summary: condition, fasta, genes_hit, total_genes, fitness_mean, ci95_lower, ci95_upper |
-| `genome_<condition>_shap.csv` | One row per gene: gene, shap, effect, annotation *(only with `--explain`)* |
+| `genome_<condition>_shap.csv` | Top `--top-n` present genes (default 20): gene, shap, effect, annotation *(only with `--explain`)* |
 
 With `--explain`, SHAP gene contributions are also printed:
 
@@ -182,7 +182,7 @@ SHAP (baseline fitness with no genes: 0.7485)
 ```
 
 - **Baseline** — predicted fitness of a hypothetical strain with no pan-genome genes
-- **SHAP value** — additive contribution of each present gene; values sum exactly to `fitness − baseline`
+- **SHAP value** — additive contribution of each present gene; values across all present genes sum to `fitness − baseline` (the printed table and CSV show the top `--top-n`)
 - **promotes / reduces** — whether carrying that gene raises or lowers fitness in this condition
 
 ### How it works
@@ -225,7 +225,7 @@ Place the revised dataset in `OriginalData/` and extract all `Revision_*.zip` fi
     └── Plasmid_analysis/
 ```
 
-Each analysis folder has one script named after the folder, an `output/` folder and, where needed, an `input/` folder. Run from the project root:
+Each analysis folder (except `Pangenome_genomic_context`, which provides output only) has one script named after the folder, an `output/` folder and, where needed, an `input/` folder. Run from the project root:
 
 ```bash
 Rscript Revision/Plasmid_analysis/Plasmid_analysis.R
@@ -237,20 +237,20 @@ Required R packages: `tidyverse`, `patchwork`, `scales`, `ragg`, `broom`, `fixes
 
 | Folder | Analysis | Main outputs |
 |---|---|---|
-| `Phylogenetic_tree` | Phylogeny annotated with ST, resistance and virulence | `Figure_S1_*` panels, rooted trees (`.nwk`) |
-| `Clonality_analysis` | Genomic vs phenotypic similarity; GWAS robustness to clone pruning | `phenotypic_similarity/`, `clone_pruning_comparison_0.001/` and `_010/` |
-| `EdgeEffect_analysis` | Plate edge-effect correction and its effect on GWAS | corrected fitness, `spatial_sensitivity.csv`, `Figure_S15_GWAS_spatial_concordance` |
-| `Pangenome_genomic_context` | Genomic context of pangenome genes: chromosomal or plasmid location of each gene, inferred from long-read assemblies of 175 isolates | `combined_blast_results_annotated.tsv`: BLAST hits of pangenome genes against chromosomal and plasmid fragments, with location (chromosome or plasmid) and plasmid replicon per hit |
+| `Phylogenetic_tree` | Phylogeny annotated with ST, resistance and virulence | `FigureS3A_*` panels (Figure S3A), rooted trees (`.nwk`) |
+| `Clonality_analysis` | Genomic vs phenotypic similarity, including by SNP-distance interval (Figure S3B); GWAS robustness to clone pruning | `phenotypic_similarity/` (incl. `FigureS3B_Phenotypic_similarity_by_SNP_interval`), `clone_pruning_comparison_0.001/` and `_010/` |
+| `EdgeEffect_analysis` | Plate edge-effect correction and its effect on GWAS | corrected fitness, `spatial_sensitivity.csv`, `GWAS_spatial_concordance` |
+| `Pangenome_genomic_context` | Genomic context of pan-genome genes: chromosomal or plasmid location of each gene, inferred from long-read assemblies of 175 isolates | `combined_blast_results_annotated.tsv`: BLAST hits of pan-genome genes against chromosomal and plasmid fragments, with location (chromosome or plasmid) and plasmid replicon per hit |
 | `ML_analysis` | Performance of the fitness-prediction models across models, feature sets and condition categories | `Figure5B_*`, `Figure5C_*`, `FigureS9_*`, `Manuscript_*.csv` summary tables |
-| `Opacity_analysis` | (A) ST and capsule effects on colony area vs opacity; (B) size–opacity concordance and ST23 deviation | `ST_capsule_*.csv`, `Figure_Sy_Virulence_Coefficient_Sensitivity`, `Figure_ST23_Size_Opacity_Concordance`, concordance tables |
-| `Overfitting_analysis` | Train–test gaps and feature counts of the fitness models | `FigureS10_Overfitting_FeatureCounts_SD` |
-| `Plasmid_analysis` | Replicon vs cargo fitness effects (LMMs, matching, ONT linkage, copy number) | `Figure_S1_LMM` … `Figure_S10_*`, `Table_S*` and `Table_LMM_*` |
+| `Opacity_analysis` | (A) ST and capsule effects on colony area vs opacity; (B) size–opacity concordance and ST23 deviation | `TableS3_*.csv` (Table S3), `ST_capsule_all_results.csv`, `Virulence_Coefficient_Sensitivity`, `FigureS4_ST23_Size_Opacity_Concordance` (Figure S4), concordance tables |
+| `Overfitting_analysis` | Train–test gaps and feature counts of the fitness models | `FigureS10A_*` (Figure S10A) |
+| `Plasmid_analysis` | Replicon vs cargo fitness effects (LMMs, matching, ONT linkage, copy number) | `FigureS6_Replicon_fitness_and_cargo` (Figure S6), `TableS4_Replicon_cargo_copy_number.csv` (Table S4), supporting `Figure_*` and `Table_*` files |
 
 `Plasmid_analysis/output/additional/` holds tables produced by code that is not included. `Pangenome_genomic_context` provides its main output only; the BLAST and annotation steps that produced it are not included. The table contains all qualifying alignments (≥95% identity, ≥90% query coverage); selecting the best alignment per gene and genome is not included.
 
 ### Input files
 
-Files in each analysis's own `input/` folder (the bold rows list the shared and `OriginalData/` files it also reads):
+Files in each analysis's own `input/` folder (the bold rows list other analysis outputs and `OriginalData/` files it also reads):
 
 | File | Description |
 |---|---|
@@ -260,7 +260,7 @@ Files in each analysis's own `input/` folder (the bold rows list the shared and 
 | `pairwise_snp_distances_fixed.tsv` | Pairwise SNP distances between all isolates |
 | `merged_gene_gwas_results.csv` | Pan-genome GWAS (Scoary) results per condition, all isolates |
 | `merged_scoary_results_0.001.csv`, `merged_scoary_results_010.csv` | The same GWAS after clone pruning at thresholds 0.001 and 0.10 (10 replicates each) |
-| **`EdgeEffect_analysis`** | *also reads `OriginalData/assay_results_full.zip` and `plate_tr_1–4.tsv`* |
+| **`EdgeEffect_analysis`** | *also reads `OriginalData/assay_results_full.zip` and `plate_tr_1-4.tsv`* |
 | `pyseer/original/`, `pyseer/spatial/` | pyseer GWAS per condition on original and spatially corrected fitness |
 | **`ML_analysis`** | *also reads `OriginalData/absolute_fitness_ML.csv`, `condition_group.csv`* |
 | `all_runs_combined.csv` | Per-run ML results (five runs) for every condition, model, feature set and split; Part 1 averages these into `output/all_models_mean_sd_five_runs.csv` (model performance, mean ± SD over five runs, per condition), which Part 2 and the Opacity and Overfitting analyses use |
@@ -273,7 +273,7 @@ Files in each analysis's own `input/` folder (the bold rows list the shared and 
 | `LMM_all_results.csv` | LMM estimates per condition × replicon under each model |
 | `replicon_VIF.csv` | Collinearity (VIF) between each replicon and the cargo genes |
 | `replicon_cargo_cooccurrence.csv` | How often each replicon and cargo gene occur in the same isolate |
-| `plasmid_best_hits_with_Kleborate.tsv` | ONT plasmid contigs with replicon hits and Kleborate cargo calls |
+| `plasmid_best_hits_with_Kleborate.csv` | Long-read contigs carrying a plasmid replicon, with replicon hit and Kleborate cargo calls; the `Type` column marks plasmids (509) and chromosomes (2) |
 | `copy_number/copy_number_data.csv` | Plasmid copy number per isolate and replicon |
 | `copy_number/copy_number_fitness_associations.csv` | Correlation between copy number and fitness per condition |
 | `within_ST_matching/*.csv` | Within-ST propensity-score matching: matched fitness differences, diagnostics, covariate balance |
