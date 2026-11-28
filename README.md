@@ -27,19 +27,19 @@ The `iris_processed_file/` directory contains corrected IRIS colony assay files 
 
 Input data are not stored in this repository due to file size. Download from Zenodo:
 
-**Data DOI:** https://doi.org/10.5281/zenodo.19931379
+**Data DOI:** https://doi.org/10.5281/zenodo.24627675
 
-`Figures_FitnessValue.R` uses this original release. The script reads its input from the absolute path `/Data/`, so place the downloaded files there (or mount the folder at `/Data`, e.g. `docker run -v "$PWD/Data:/Data" ...`):
+`Figures_FitnessValue.R` reads its input from the absolute path `/OriginalData/`, so place the downloaded files there (or mount the folder at `/OriginalData`, e.g. `docker run -v "$PWD/OriginalData:/OriginalData" ...`):
 
 ```text
-/Data/
+/OriginalData/
 ├── *.csv, *.tsv, *.Rtab, *.fa    # tables listed below
 ├── conditions/plate_tr_1-4.tsv   # move the four plate_tr_*.tsv files here
 └── *.zip                         # unzip before running
 ```
 
 ```bash
-cd /Data && mkdir -p conditions && mv plate_tr_*.tsv conditions/
+cd /OriginalData && mkdir -p conditions && mv plate_tr_*.tsv conditions/
 for z in *.zip; do unzip -q "$z"; done
 Rscript /path/to/repo/OriginalAnalysis/Figures_FitnessValue.R
 ```
@@ -205,7 +205,7 @@ Models were trained on 160 conditions using GWAS-significant genes (Benjamini-Ho
 
 ## Revision Analyses
 
-Analyses added during manuscript revision. Their scripts and data are in the revised Zenodo release (`Revision_*.zip`, `OriginalData/`), in which isolates are identified by **BioSample accession** and only the **1,462 study isolates** and **214 conditions** are kept.
+Analyses added during manuscript revision. Their scripts and data are in the Zenodo release ([10.5281/zenodo.24627675](https://doi.org/10.5281/zenodo.24627675); `Revision_*.zip`, `OriginalData.zip`), in which isolates are identified by **BioSample accession** and only the **1,462 study isolates** and **214 conditions** are kept.
 
 ### Setup
 

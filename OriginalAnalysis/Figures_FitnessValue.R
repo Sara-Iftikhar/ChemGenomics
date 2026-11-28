@@ -3,14 +3,14 @@
 # Purpose: Generate figures for colony-size/opacity relationships, replicate
 #          consistency, condition categories, GWAS summaries, plasmid effects,
 #          machine-learning performance, and ST/virulence/resistance analyses.
-# Data root: all project paths have been updated to use /Data/.
+# Data root: all project paths have been updated to use /OriginalData/.
 # Note: code logic is unchanged; only comments and requested path updates were added.
 # -----------------------------------------------------------------------------
 #Results scatter plot Figure 1
 # Load core tidyverse functions for data import, wrangling, and plotting.
 library(tidyverse)
 # Directory containing IRIS colony-measurement output files.
-dir_path <- "/Data/assay_results_full"
+dir_path <- "/OriginalData/assay_results_full"
 files <- list.files(dir_path,pattern = "-1_A\\.JPG\\.iris$")
 files<-gsub("-1_A.JPG.iris","",files)
 conditions<- unique(as.character( sapply(files, function(x) paste0( strsplit(x,"-")[[1]][1], "-",  strsplit(x,"-")[[1]][2]) ) ))  
@@ -23,10 +23,10 @@ for(i in 1:length(conditions)){
   print(i/length(conditions))
   condition_input<-conditions[i]
   # Construct input paths for the four replicate/plate files for the current condition.
-  m1_tag <- paste0("/Data/assay_results_full/", condition_input, "-1-1_A.JPG.iris")
-  m2_tag <- paste0("/Data/assay_results_full/", condition_input, "-2-1_A.JPG.iris")
-  m3_tag <- paste0("/Data/assay_results_full/", condition_input, "-3-1_A.JPG.iris")
-  m4_tag <- paste0("/Data/assay_results_full/", condition_input, "-4-1_A.JPG.iris")
+  m1_tag <- paste0("/OriginalData/assay_results_full/", condition_input, "-1-1_A.JPG.iris")
+  m2_tag <- paste0("/OriginalData/assay_results_full/", condition_input, "-2-1_A.JPG.iris")
+  m3_tag <- paste0("/OriginalData/assay_results_full/", condition_input, "-3-1_A.JPG.iris")
+  m4_tag <- paste0("/OriginalData/assay_results_full/", condition_input, "-4-1_A.JPG.iris")
   
   # Read IRIS outputs while ignoring metadata/header comment lines.
   m1 <- read_tsv(m1_tag, comment = "#", show_col_types = FALSE)
@@ -108,15 +108,15 @@ for(i in 1:length(conditions)){
   print(i/length(conditions))
   condition_input<-conditions[i]
   # Read plate-layout metadata that maps row/column positions to strain IDs.
-  p1 <- read_tsv("/Data/conditions/plate_tr_1.tsv", show_col_types = FALSE)
-  p2 <- read_tsv("/Data/conditions/plate_tr_2.tsv", show_col_types = FALSE)
-  p3 <- read_tsv("/Data/conditions/plate_tr_3.tsv", show_col_types = FALSE)
-  p4 <- read_tsv("/Data/conditions/plate_tr_4.tsv", show_col_types = FALSE)
+  p1 <- read_tsv("/OriginalData/conditions/plate_tr_1.tsv", show_col_types = FALSE)
+  p2 <- read_tsv("/OriginalData/conditions/plate_tr_2.tsv", show_col_types = FALSE)
+  p3 <- read_tsv("/OriginalData/conditions/plate_tr_3.tsv", show_col_types = FALSE)
+  p4 <- read_tsv("/OriginalData/conditions/plate_tr_4.tsv", show_col_types = FALSE)
   
-  m1_tag <- paste0("/Data/assay_results_full/", condition_input, "-1-1_A.JPG.iris")
-  m2_tag <- paste0("/Data/assay_results_full/", condition_input, "-2-1_A.JPG.iris")
-  m3_tag <- paste0("/Data/assay_results_full/", condition_input, "-3-1_A.JPG.iris")
-  m4_tag <- paste0("/Data/assay_results_full/", condition_input, "-4-1_A.JPG.iris")
+  m1_tag <- paste0("/OriginalData/assay_results_full/", condition_input, "-1-1_A.JPG.iris")
+  m2_tag <- paste0("/OriginalData/assay_results_full/", condition_input, "-2-1_A.JPG.iris")
+  m3_tag <- paste0("/OriginalData/assay_results_full/", condition_input, "-3-1_A.JPG.iris")
+  m4_tag <- paste0("/OriginalData/assay_results_full/", condition_input, "-4-1_A.JPG.iris")
   
   m1 <- read_tsv(m1_tag, comment = "#", show_col_types = FALSE)
   m2 <- read_tsv(m2_tag, comment = "#", show_col_types = FALSE)
@@ -288,12 +288,6 @@ cor_matrix[lower.tri(cor_matrix, diag = F)]
 # -----------------------------------------------------------------------------
 #Figure ICC distribution per codntion and aggregate 
 
-#589672 SAR
-#191887 SAR
-#563000 SAR
-132,120.15 USD
-
-#30865
 
 
 # -----------------------------------------------------------------------------
@@ -302,7 +296,7 @@ cor_matrix[lower.tri(cor_matrix, diag = F)]
 # broad categories and chemical-class subgroups.
 # -----------------------------------------------------------------------------
 #Pie chart 
-fintess_mat <- read_csv("/Data/absolute_fitness_ML.csv")
+fintess_mat <- read_csv("/OriginalData/absolute_fitness_ML.csv")
 colnames(fintess_mat)
 
 
@@ -311,10 +305,10 @@ colnames(fintess_mat)
 #ColistinMeropenem-02,006ugml
 #ColistinMeropenem-04,006ugml
 
-fintess_mat <- read_csv("/Data/absolute_fitness_ML.csv")
+fintess_mat <- read_csv("/OriginalData/absolute_fitness_ML.csv")
 colnames(fintess_mat)
 
-condition_group<- read_csv("/Data/condition_group_11March.csv",show_col_types = FALSE)
+condition_group<- read_csv("/OriginalData/condition_group_11March.csv",show_col_types = FALSE)
 condition_group$File_name
 
 # Clean file-name labels so they match sanitized fitness-matrix column names.
@@ -451,10 +445,10 @@ ggplot(category_counts, aes(x = 2, y = n, fill = Category)) +
 #stress
 
 #stresses
-#fintess_mat <- read_csv("/Data/absolute_fitness_ML.csv")
+#fintess_mat <- read_csv("/OriginalData/absolute_fitness_ML.csv")
 #colnames(fintess_mat)
 
-#condition_group<- read_csv("/Data/condition_group.csv",show_col_types = FALSE)
+#condition_group<- read_csv("/OriginalData/condition_group.csv",show_col_types = FALSE)
 #condition_group$File_name
 
 #condition_group$File_name <- gsub("[^A-Za-z0-9_]", "", condition_group$File_name )
@@ -537,7 +531,7 @@ ggplot(category_counts, aes(x = 2, y = n, fill = Chemical_class)) +
   )
 
 #stresses
-#condition_group<- read_csv("/Data/condition_group.csv")
+#condition_group<- read_csv("/OriginalData/condition_group.csv")
 
 #condition_group$File_name <- gsub("[^A-Za-z0-9_]", "", condition_group$File_name )
 #condition_group <- condition_group[match(colnames(fintess_mat)[-1],condition_group$File_name),]
@@ -619,7 +613,7 @@ ggplot(category_counts, aes(x = 2, y = n, fill = Chemical_class)) +
 # osmotic, and physical/environmental classes.
 # -----------------------------------------------------------------------------
 #Environmental stress
-#condition_group<- read_csv("/Data/condition_group.csv")
+#condition_group<- read_csv("/OriginalData/condition_group.csv")
 
 #condition_group$File_name <- gsub("[^A-Za-z0-9_]", "", condition_group$File_name )
 #condition_group <- condition_group[match(colnames(fintess_mat)[-1],condition_group$File_name),]
@@ -701,7 +695,7 @@ ggplot(category_counts, aes(x = 2, y = n, fill = Chemical_class)) +
 # non-antibiotic, and environmental-condition components.
 # -----------------------------------------------------------------------------
 #stress combination 
-#condition_group<- read_csv("/Data/condition_group.csv")
+#condition_group<- read_csv("/OriginalData/condition_group.csv")
 #sort(table(condition_group$Category))
 
 #condition_group$File_name <- gsub("[^A-Za-z0-9_]", "", condition_group$File_name )
@@ -782,7 +776,7 @@ ggplot(category_counts, aes(x = 2, y = n, fill = Chemical_class)) +
 # classes for composition plots.
 # -----------------------------------------------------------------------------
 #antibiotcs
-#condition_group<- read_csv("/Data/condition_group.csv")
+#condition_group<- read_csv("/OriginalData/condition_group.csv")
 #sort(table(condition_group$Category))
 
 #condition_group$File_name <- gsub("[^A-Za-z0-9_]", "", condition_group$File_name )
@@ -925,7 +919,7 @@ ggplot(category_counts, aes(x = 2, y = n, fill = Chemical_class)) +
 #Bimodality 
 library(diptest)
 # Directory containing IRIS colony-measurement output files.
-dir_path <- "/Data/assay_results_full"
+dir_path <- "/OriginalData/assay_results_full"
 files <- list.files(dir_path,pattern = "-1_A\\.JPG\\.iris$")
 files<-gsub("-1_A.JPG.iris","",files)
 
@@ -975,7 +969,7 @@ df_modality<- data.frame(
 
 condition_tags
 # Load condition tags and clean encodings for plotting labels.
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"))
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"))
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -1239,7 +1233,7 @@ ggplot(df_summary, aes(x = tag, y = prop, fill = p_dist)) +
 #ICC
 library(diptest)
 # Directory containing IRIS colony-measurement output files.
-dir_path <- "/Data/assay_results_full"
+dir_path <- "/OriginalData/assay_results_full"
 files <- list.files(dir_path,pattern = "-1_A\\.JPG\\.iris$")
 files<-gsub("-1_A.JPG.iris","",files)
 
@@ -1267,7 +1261,7 @@ cor(tmp$d_dist[match( df_modality$conditions, tmp$conditions)], df_modality$icc 
 cor.test(tmp$d_dist[match( df_modality$conditions, tmp$conditions)], df_modality$icc , use ="pairwise.complete.obs")
 
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"))
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"))
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -1459,8 +1453,8 @@ ggplot(df_modality, aes(x = tag, y = icc , fill = tag)) +
 # -----------------------------------------------------------------------------
 #GWAS Genes Figure 
 # Read pangenome GWAS summary and AMRFinder annotation results.
-scatter_gwas <- read_csv("/Data/pangenome_pliotropy.csv",show_col_types = FALSE)
-arg_vir<- read_tsv("/Data/AMRFinder_results.tsv",show_col_types = FALSE)
+scatter_gwas <- read_csv("/OriginalData/pangenome_pliotropy.csv",show_col_types = FALSE)
+arg_vir<- read_tsv("/OriginalData/AMRFinder_results.tsv",show_col_types = FALSE)
 
 # Map AMR/virulence/stress annotations to GWAS genes.
 scatter_gwas$arg_vir <- arg_vir$`Element type`[match(scatter_gwas$Gene, arg_vir$`Contig id` )]
@@ -1472,10 +1466,10 @@ scatter_gwas$arg_vir <- ifelse(is.na(scatter_gwas$arg_vir),"Other", scatter_gwas
 scatter_gwas_short <- select(scatter_gwas, Gene, Odds_ratio,condition,type,  arg_vir)
 scatter_gwas_short$condition <- gsub("results","",scatter_gwas_short$condition)
 
-#conditions<-read_csv("/Data/condition_group.csv",show_col_types = FALSE)
+#conditions<-read_csv("/OriginalData/condition_group.csv",show_col_types = FALSE)
 #conditions$File_name <- gsub("[^A-Za-z0-9]+", "", conditions$File_name)
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"))
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"))
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -1653,14 +1647,14 @@ ggplot(freq_df,
 # -----------------------------------------------------------------------------
 #ARGs 
 # Folder containing ARG GWAS result CSV files.
-folder <- "/Data/ARG"
+folder <- "/OriginalData/ARG"
 csv_files <- list.files(path = folder, pattern = "\\.csv$", full.names = TRUE)
 output_GWAS_ARG<-c()
 # Read each ARG GWAS file and attach the corresponding condition name.
 for(i in 1:length(csv_files)){
-  trait<-gsub("/Data/ARG/","",csv_files[i])
+  trait<-gsub("/OriginalData/ARG/","",csv_files[i])
   trait_nocsv<-gsub(".results.csv","",trait)
-  acc_genes<-read_csv(paste0("/Data/ARG/", trait_nocsv, ".results.csv"),show_col_types = FALSE) 
+  acc_genes<-read_csv(paste0("/OriginalData/ARG/", trait_nocsv, ".results.csv"),show_col_types = FALSE) 
   trait<-gsub(".csv",".",trait)
   trait <- gsub("[^A-Za-z0-9]+", "", trait)
   acc_genes$condition<-trait
@@ -1674,7 +1668,7 @@ output_GWAS_ARG$type <- ifelse(
 
 output_GWAS_ARG<- output_GWAS_ARG[ !grepl("rpsJ", output_GWAS_ARG$Gene),]
 
-#write_csv(output_GWAS_pan,"/Data/pangenome_pliotropy.csv" )
+#write_csv(output_GWAS_pan,"/OriginalData/pangenome_pliotropy.csv" )
 
 output_GWAS_ARG$Gene_short<- as.character( sapply(output_GWAS_ARG$Gene , function(x) strsplit(x,"_")[[1]][1]) )
 output_GWAS_ARG_short<- select(output_GWAS_ARG,Gene,Gene_short,Odds_ratio,Benjamini_H_p, Best_pairwise_comp_p, Worst_pairwise_comp_p,condition  )
@@ -1740,7 +1734,7 @@ plot_df$gene_class = case_when(
 )
 
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"))
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"))
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -1849,7 +1843,7 @@ plot_df$Odds_ratio
 # Pairwise fitness-profile correlations are embedded with t-SNE and clustered.
 # -----------------------------------------------------------------------------
 #correlation of conditions
-Fitness<-read_csv("/Data/absolute_fitness_ML.csv")
+Fitness<-read_csv("/OriginalData/absolute_fitness_ML.csv")
 colnames(Fitness)[1]<-"Name"
 
 
@@ -1866,7 +1860,7 @@ colnames(correlation_matrix) <- colnames(Fitness)[-1]
 row.names(correlation_matrix) <- colnames(Fitness)[-1]
 
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -1978,7 +1972,7 @@ category_colors <- c(
   "Envelope stress" = "#17BECF"
 )
 
-write_csv(tsne_df, "/Data/clusters.csv")
+write_csv(tsne_df, "/OriginalData/clusters.csv")
 library(ggplot2)
 
 ggplot(plot_df, aes(x = factor(cluster), y = count, fill = category)) +
@@ -2080,11 +2074,11 @@ corrplot(cat_mat_ord,
 # -----------------------------------------------------------------------------
 #plasmid cost
 library(tidyverse)
-plasmid<-read_tsv("/Data/summary_ARG.tsv")
+plasmid<-read_tsv("/OriginalData/summary_ARG.tsv")
 plasmid$`#FILE` <- gsub("abricate_","", plasmid$`#FILE`)
 plasmid$`#FILE` <- gsub(".fasta.tsv","", plasmid$`#FILE`)
 
-Fitness<-read_csv("/Data/absolute_fitness_ML.csv")
+Fitness<-read_csv("/OriginalData/absolute_fitness_ML.csv")
 # Approach 1: using sapply & var (numeric columns)
 # Approach: check for >1 unique non-NA value (works generically)
 colnames(Fitness)[1]<-"Name"
@@ -2124,7 +2118,7 @@ Y <- Fitness %>%
 
 # Restrict the plasmid model to a selected sequence type before fitting.
 #STs filtering
-kleborate<-read_tsv("/Data/tot_results.tsv",show_col_types = FALSE)
+kleborate<-read_tsv("/OriginalData/tot_results.tsv",show_col_types = FALSE)
 kleborate$ST_short <-as.character(sapply(kleborate$ST, function(x) strsplit(x,"-")[[1]][1]))
 ST_vector <- kleborate$ST_short[match( row.names(X) , kleborate$strain)]
 #Fitness<- Fitness[which(ST_vector=="ST2096"),]
@@ -2176,7 +2170,7 @@ tot_vals[1:10,1:10]
 dim(tot_vals)
 
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -2268,13 +2262,13 @@ ggplot(df_long, aes(plasmid, fitness, fill=category)) +
     legend.position = "none"
   )
 
-#write_csv(df_long, "/Data/plasmid_cost_ST147.csv")
+#write_csv(df_long, "/OriginalData/plasmid_cost_ST147.csv")
 # -----------------------------------------------------------------------------
 # Compare plasmid-associated fitness effects between ST147 and ST2096.
 # -----------------------------------------------------------------------------
 #Plasmid count and cost 
-tmp_ST147 <- read_csv("/Data/plasmid_cost_ST147.csv")
-tmp_ST2096 <- read_csv("/Data/plasmid_cost_ST2096.csv") 
+tmp_ST147 <- read_csv("/OriginalData/plasmid_cost_ST147.csv")
+tmp_ST2096 <- read_csv("/OriginalData/plasmid_cost_ST2096.csv") 
 
 head(tmp_ST147)
 head(tmp_ST2096)
@@ -2308,7 +2302,7 @@ df %>%
 # the test split, including prediction intervals and the 1:1 reference line.
 # -----------------------------------------------------------------------------
 #test versus predicted Figure
-inp<-read_csv("/Data/prediction_new/new_datamode_predictions_NGBoost_DMSO1_mode4.csv")
+inp<-read_csv("/OriginalData/prediction_new/new_datamode_predictions_NGBoost_DMSO1_mode4.csv")
 inp<-inp[inp$split=="test",]
 ggplot(inp, aes(x = actual, y = predicted)) +
   
@@ -2357,19 +2351,19 @@ ggplot(inp, aes(x = actual, y = predicted)) +
 # -----------------------------------------------------------------------------
 #Machine Learning plots
 # List all model-result files for the prediction benchmark.
-all_files <- list.files(path = "/Data/results_prediction",
+all_files <- list.files(path = "/OriginalData/results_prediction",
                         full.names = TRUE,
                         recursive = F)
 
 
-all_files_short <- list.files(path = "/Data/results_prediction",
+all_files_short <- list.files(path = "/OriginalData/results_prediction",
                               full.names = F,
                               recursive = F)
 
 all_files_short <- gsub("new_results_","",all_files_short)
 
 
-unitigs_files<-list.files(path = "/Data/prediction_new",
+unitigs_files<-list.files(path = "/OriginalData/prediction_new",
                           full.names = F,
                           pattern = "new_ML_unitig*",
                           recursive = F)
@@ -2377,7 +2371,7 @@ unitigs_files<-list.files(path = "/Data/prediction_new",
 unitigs_files<-gsub("new_ML_unitig_input_","",unitigs_files)
 unitigs_files<-gsub(".csv","",unitigs_files)
 
-snp_files<-list.files(path = "/Data/prediction_new",
+snp_files<-list.files(path = "/OriginalData/prediction_new",
                       full.names = F,
                       pattern = "new_ML_SNP_input_*",
                       recursive = F)
@@ -2527,7 +2521,7 @@ ggplot(df_results, aes(x = model , y = cov95_test, fill = mode)) +
 
 
 # Directory containing IRIS colony-measurement output files.
-dir_path <- "/Data/assay_results_full"
+dir_path <- "/OriginalData/assay_results_full"
 files <- list.files(dir_path,pattern = "condition_ICC_New_")
 ICC_vals<-c()
 sd_vals<-c()
@@ -2745,19 +2739,19 @@ ggplot(performance_df, aes(x = model , y = rho_val_test , fill = mode)) +
 # -----------------------------------------------------------------------------
 #new plotting prediction 
 
-all_files <- list.files(path = "/Data/results_prediction",
+all_files <- list.files(path = "/OriginalData/results_prediction",
                         full.names = TRUE,
                         recursive = F)
 
 
-all_files_short <- list.files(path = "/Data/results_prediction",
+all_files_short <- list.files(path = "/OriginalData/results_prediction",
                               full.names = F,
                               recursive = F)
 
 all_files_short <- gsub("new_results_","",all_files_short)
 
 
-unitigs_files<-list.files(path = "/Data/prediction_new",
+unitigs_files<-list.files(path = "/OriginalData/prediction_new",
                           full.names = F,
                           pattern = "new_ML_unitig*",
                           recursive = F)
@@ -2765,7 +2759,7 @@ unitigs_files<-list.files(path = "/Data/prediction_new",
 unitigs_files<-gsub("new_ML_unitig_input_","",unitigs_files)
 unitigs_files<-gsub(".csv","",unitigs_files)
 
-snp_files<-list.files(path = "/Data/prediction_new",
+snp_files<-list.files(path = "/OriginalData/prediction_new",
                       full.names = F,
                       pattern = "new_ML_SNP_input_*",
                       recursive = F)
@@ -2828,7 +2822,7 @@ boxplot(performance_df$cov95_test ~ performance_df$model)
 
 
 # Directory containing IRIS colony-measurement output files.
-dir_path <- "/Data/assay_results_full"
+dir_path <- "/OriginalData/assay_results_full"
 files <- list.files(dir_path,pattern = "condition_ICC_New_")
 ICC_vals<-c()
 sd_vals<-c()
@@ -2857,7 +2851,7 @@ best_per_condition$width_test_normalized <- best_per_condition$width_test / best
 hist(best_per_condition$rho_norm)
 
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -3133,7 +3127,7 @@ ggplot(plot_df,
 #Ratio plot
 
 #ratio plotting 
-files <- list.files(path = "/Data/prediction_new",
+files <- list.files(path = "/OriginalData/prediction_new",
                     pattern = "new_results_ratio_*",
                     full.names = T) 
 results_tot<-c()
@@ -3196,7 +3190,7 @@ ggplot(results_summary, aes(x = ratio*5, y = mean_rho, color = split, fill = spl
 #barplots stratified non-stratified 
 
 #stratified 
-files <- list.files(path = "/Data/prediction_new",
+files <- list.files(path = "/OriginalData/prediction_new",
                     pattern = "new_stratified_results*",
                     full.names = T) 
 
@@ -3224,7 +3218,7 @@ ggplot(results_tot_stratified, aes(x = target, y = rho)) +
 
 
 
-files <- list.files(path = "/Data/prediction_new",
+files <- list.files(path = "/OriginalData/prediction_new",
                     pattern = "nonstratified_results*",
                     full.names = T) 
 
@@ -3254,7 +3248,7 @@ ggplot(results_tot_non_stratified, aes(x = target, y = rho)) +
 results_tot <- rbind(results_tot_stratified, results_tot_non_stratified)
 
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -3453,8 +3447,8 @@ ggplot(cat_mean,
 # Mantel test between genomic distance and fitness-profile distance.
 # -----------------------------------------------------------------------------
 #Mantel test 
-kmer<-read_csv("/Data/total_distance_matrix.csv")
-fitness<-read_csv("/Data/absolute_fitness_ML.csv")
+kmer<-read_csv("/OriginalData/total_distance_matrix.csv")
+fitness<-read_csv("/OriginalData/absolute_fitness_ML.csv")
 
 shared<- intersect(colnames(kmer),fitness$Name )
 kmer<-kmer[match(shared,colnames(kmer)),match(shared,colnames(kmer))]
@@ -3486,13 +3480,13 @@ mantel_res$signif
 # -----------------------------------------------------------------------------
 #intercation virulence rsistance
 library(pheatmap)
-fitness_mat<-read_csv("/Data/absolute_fitness_ML.csv")
+fitness_mat<-read_csv("/OriginalData/absolute_fitness_ML.csv")
 # Approach 1: using sapply & var (numeric columns)
 # Approach: check for >1 unique non-NA value (works generically)
 colnames(fitness_mat)[1]<-"Name"
 
 
-kleborate<-read_tsv("/Data/tot_results.tsv",show_col_types = FALSE)
+kleborate<-read_tsv("/OriginalData/tot_results.tsv",show_col_types = FALSE)
 kleborate$ST_short <-as.character(sapply(kleborate$ST, function(x) strsplit(x,"-")[[1]][1]))
 kleborate$strain <- toupper(kleborate$strain)
 
@@ -3501,7 +3495,7 @@ fitness_mat<-fitness_mat[match(shared, fitness_mat$Name), ]
 kleborate<-kleborate[ match(shared, kleborate$strain),]
 
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -3615,13 +3609,13 @@ ggplot(output_short, aes(x = reorder(Condition, Estimate), y = Estimate)) +
 # -----------------------------------------------------------------------------
 #STs
 library(pheatmap)
-fitness_mat<-read_csv("/Data/absolute_fitness_ML.csv")
+fitness_mat<-read_csv("/OriginalData/absolute_fitness_ML.csv")
 # Approach 1: using sapply & var (numeric columns)
 # Approach: check for >1 unique non-NA value (works generically)
 colnames(fitness_mat)[1]<-"Name"
 
 
-kleborate<-read_tsv("/Data/tot_results.tsv",show_col_types = FALSE)
+kleborate<-read_tsv("/OriginalData/tot_results.tsv",show_col_types = FALSE)
 kleborate$ST_short <-as.character(sapply(kleborate$ST, function(x) strsplit(x,"-")[[1]][1]))
 kleborate$strain <- toupper(kleborate$strain)
 
@@ -3672,7 +3666,7 @@ cols    <- c(cols1, cols2)
 
 
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -3900,7 +3894,7 @@ ggplot(summary_df,
 #Interactions
 library(tidyverse)
 # Directory containing IRIS colony-measurement output files.
-dir_path <- "/Data/assay_results_full"
+dir_path <- "/OriginalData/assay_results_full"
 files <- list.files(dir_path,pattern = "-1_A\\.JPG\\.iris$")
 files<-gsub("-1_A.JPG.iris","",files)
 conditions<- unique(as.character( sapply(files, function(x) paste0( strsplit(x,"-")[[1]][1], "-",  strsplit(x,"-")[[1]][2]) ) ))  
@@ -3994,7 +3988,7 @@ for(j in 1:length(cond_2_list)){
 }
 
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -4134,7 +4128,7 @@ colnames(df_tot_comb)<-c("Interaction_type", "Freq", "condition")
 df_tot_comb
 
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -4222,16 +4216,16 @@ results$condition
 
 
 #plasmid count 
-plasmid<-read_tsv("/Data/summary_ARG.tsv")
+plasmid<-read_tsv("/OriginalData/summary_ARG.tsv")
 plasmid$`#FILE` <- gsub("abricate_","", plasmid$`#FILE`)
 plasmid$`#FILE` <- gsub(".fasta.tsv","", plasmid$`#FILE`)
 
-Fitness<-read_csv("/Data/absolute_fitness_ML.csv")
+Fitness<-read_csv("/OriginalData/absolute_fitness_ML.csv")
 colnames(Fitness)[1]<-"Name"
 Fitness<-Fitness[match(plasmid$`#FILE`,Fitness$Name),]
 
 #STs filtering
-kleborate<-read_tsv("/Data/tot_results.tsv",show_col_types = FALSE)
+kleborate<-read_tsv("/OriginalData/tot_results.tsv",show_col_types = FALSE)
 kleborate$ST_short <-as.character(sapply(kleborate$ST, function(x) strsplit(x,"-")[[1]][1]))
 ST_vector <- kleborate$ST_short[match(Fitness$Name, kleborate$strain)]
 #Fitness<- Fitness[which(ST_vector=="ST2096"),]
@@ -4268,7 +4262,7 @@ breaks <- c(seq(minVal, 0.999, length.out = 50),
 
 
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -4509,7 +4503,7 @@ boxplot(performance_df$cov95_test ~ performance_df$model)
 
 
 # Directory containing IRIS colony-measurement output files.
-dir_path <- "/Data/assay_results_full"
+dir_path <- "/OriginalData/assay_results_full"
 files <- list.files(dir_path,pattern = "condition_ICC_New_")
 ICC_vals<-c()
 sd_vals<-c()
@@ -4536,7 +4530,7 @@ hist(performance_df$rho_norm)
 
 mean(ICC_vals[-1])
 
-#write_csv(ICC_df, "/Data/ICC_df.csv" )
+#write_csv(ICC_df, "/OriginalData/ICC_df.csv" )
 
 
 performance_df
@@ -4567,7 +4561,7 @@ ggplot(best_models, aes(x = reorder(condition, rho_test),
   )
 
 
-condition_group<- read_csv("/Data/condition_group.csv")
+condition_group<- read_csv("/OriginalData/condition_group.csv")
 condition_group$File_name <- gsub("[^A-Za-z0-9_]", "", condition_group$File_name )
 
 condition_group$Category[match(best_models$condition,condition_group$File_name)]
@@ -4604,8 +4598,8 @@ ggplot(best_models,
 #Feature importance 
 
 
-#write_csv(tot_importance, "/Data/SHAP_important_features.csv")
-tot_importance <- read_csv("/Data/SHAP_important_features.csv")
+#write_csv(tot_importance, "/OriginalData/SHAP_important_features.csv")
+tot_importance <- read_csv("/OriginalData/SHAP_important_features.csv")
 tot_importance$feature_type <- ifelse(
   grepl("\\.\\.\\.\\.\\.GT", tot_importance$feature), "SNP",
   ifelse(
@@ -4619,11 +4613,11 @@ tot_importance$feature_type <- ifelse(
 max_rank <- max(tot_importance$rank_final, na.rm = TRUE)
 
 
-#conditions<-read_csv("/Data/condition_group.csv",show_col_types = FALSE)
+#conditions<-read_csv("/OriginalData/condition_group.csv",show_col_types = FALSE)
 #conditions$File_name <- gsub("[^A-Za-z0-9]+", "", conditions$File_name)
 #tot_importance$category<-conditions$Category[match(tot_importance$target, conditions$File_name)]
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -4768,7 +4762,7 @@ ggplot(tot_importance, aes(x = target, y = rank_final)) +
 
 levels(tot_importance$target)
 colnames(tot_importance)
-#write_csv(tot_importance, "/Data/predictive_totall_importance_1.csv")
+#write_csv(tot_importance, "/OriginalData/predictive_totall_importance_1.csv")
 
 x_order <- tot_importance %>%
   arrange(category, target) %>%
@@ -4776,10 +4770,10 @@ x_order <- tot_importance %>%
   pull(target)
 
 #features 
-inp<-read_csv("/Data/predictive_features.csv")
+inp<-read_csv("/OriginalData/predictive_features.csv")
 colnames(inp)[1]<-"Name"
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -4787,7 +4781,7 @@ condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", t
 inp$category<- condition_tags$Category[match(inp$Name, condition_tags$File_name)]
 inp$Clean_Tags <- condition_tags$Clean_Tags[match(inp$Name, condition_tags$File_name)]
 inp <- inp[!is.na(inp$Clean_Tags),]
-#write_csv(tot_importance, "/Data/predictive_totall_importance.csv")
+#write_csv(tot_importance, "/OriginalData/predictive_totall_importance.csv")
 
 
 
@@ -4834,13 +4828,13 @@ ggplot(inp_plot, aes(x = Name, y = SNP, fill = category)) +
 
 #Virulence and resistance score 
 library(tidyverse)
-ARG <- read_csv("/Data/AMR_genes.csv")
+ARG <- read_csv("/OriginalData/AMR_genes.csv")
 colnames(ARG)[1]<-"Name"
 
-kleborate<-read_tsv("/Data/tot_results.tsv",show_col_types = FALSE)
+kleborate<-read_tsv("/OriginalData/tot_results.tsv",show_col_types = FALSE)
 kleborate<-kleborate[match( ARG$Name, kleborate$strain),]
 
-Fitness<-read_csv("/Data/absolute_fitness_mat_ML_22Feb.csv")
+Fitness<-read_csv("/OriginalData/absolute_fitness_mat_ML_22Feb.csv")
 
 colnames(Fitness)[1]<-"Name"
 Fitness<-Fitness[match(ARG$Name,Fitness$Name),]
@@ -4849,7 +4843,7 @@ kleborate$combined <- paste0("VirScore=",kleborate$virulence_score, "_", "ResSco
 Fitness$combined <- kleborate$combined
 Fitness<-Fitness[Fitness$combined != "VirScore=NA_ResScore=NA" & Fitness$combined != "VirScore=5_ResScore=2" & Fitness$combined != "VirScore=2_ResScore=0",]
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -4864,7 +4858,7 @@ inp$Clean_Tags <- condition_tags$Clean_Tags[match(inp$Name, condition_tags$File_
 #inp <- inp[!is.na(inp$Clean_Tags),]
 
 #df<-as.data.frame.matrix(table(Fitness$combined, Fitness$ST_short)) 
-#write.csv(df, "/Data/df_ST.csv")
+#write.csv(df, "/OriginalData/df_ST.csv")
 
 fitness_mat_combined <- Fitness
 fitness_mat_combined$ST <- Fitness$combined
@@ -5082,9 +5076,9 @@ mat %>%
 #Pleiotropy SNP and Gene 
 
 #pleiotropy 
-gwas_hits <- read_csv("/Data/GWAS_results_SNPs_Pangenome.csv")
+gwas_hits <- read_csv("/OriginalData/GWAS_results_SNPs_Pangenome.csv")
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -5092,7 +5086,7 @@ condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", t
 #colnames(Fitness)[length(colnames(Fitness))] <- "combined"
 #Fitness<- Fitness[,!is.na(colnames(Fitness))]
 
-#conditions<-read_csv("/Data/condition_group.csv",show_col_types = FALSE)
+#conditions<-read_csv("/OriginalData/condition_group.csv",show_col_types = FALSE)
 #conditions$File_name <- gsub("[^A-Za-z0-9]+", "", conditions$File_name)
 
 gwas_hits$category<-condition_tags$Category[match(gwas_hits$condition, condition_tags$File_name)]
@@ -5138,7 +5132,7 @@ top_genes <- pleiotropy_df %>%
 
 
 top_genes <- top_genes[top_genes$pleiotropy_score==9,]
-write_csv(top_genes, "/Data/top_pleiotropy_genes.csv")
+write_csv(top_genes, "/OriginalData/top_pleiotropy_genes.csv")
 
 
 gwas_hits_short<- gwas_hits[which(gwas_hits$Gene %in% top_genes$Gene),]
@@ -5286,7 +5280,7 @@ ggplot(gwas_df,
     y = "Gene"
   )
 
-pangenome <- read_csv("/Data/gene_presence_absence_roary.csv")
+pangenome <- read_csv("/OriginalData/gene_presence_absence_roary.csv")
 gwas_df$Gene_Annotation <- pangenome$Annotation[match( gwas_df$Gene, pangenome$Gene)]
 
 df<-cbind(unique(gwas_df$Gene), pangenome$Annotation[match( unique(gwas_df$Gene), pangenome$Gene)]) 
@@ -5333,14 +5327,14 @@ library(tidyverse)
 library(clusterProfiler)
 library(KEGGREST)
 
-input <- read_csv("/Data/SNP_GWAS_annot.csv")
+input <- read_csv("/OriginalData/SNP_GWAS_annot.csv")
 input$label <- gsub("[^A-Za-z0-9]+", "", input$label)
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
-#condition_group<- read_csv("/Data/condition_group.csv")
+#condition_group<- read_csv("/OriginalData/condition_group.csv")
 
 #condition_group$File_name <- gsub("[^A-Za-z0-9]+", "", condition_group$File_name)
 
@@ -5370,7 +5364,7 @@ gene_pleiotropy <- input_short %>%
 arrange(gene_pleiotropy, pleiotropy_score)
 
 top_genes <- gene_pleiotropy[gene_pleiotropy$pleiotropy_score==9,]
-#write_csv(top_genes, "/Data/SNP_pleiotroy.csv")
+#write_csv(top_genes, "/OriginalData/SNP_pleiotroy.csv")
 
 
 top_genes <- gene_pleiotropy %>%
@@ -5470,7 +5464,7 @@ ggplot(plot_df,
   )
 
 
-kegg_map <- read_tsv("/Data/kegg_map.tsv", col_names = c("LOCUS_TAG", "KEGG_ID", "Pathway"))
+kegg_map <- read_tsv("/OriginalData/kegg_map.tsv", col_names = c("LOCUS_TAG", "KEGG_ID", "Pathway"))
 top_kegg <- kegg_map %>%
   filter(LOCUS_TAG %in% top_genes) %>%  # only your input genes
   pull(KEGG_ID) %>%
@@ -5526,7 +5520,7 @@ enrich_df
 
 
 #GO enrichment 
-go_map <- read_tsv("/Data/go_map.tsv", col_names = c("LOCUS_TAG", "GO", "Description"), comment = "#")
+go_map <- read_tsv("/OriginalData/go_map.tsv", col_names = c("LOCUS_TAG", "GO", "Description"), comment = "#")
 
 bg_go <- go_map %>%
   distinct(LOCUS_TAG, GO)
@@ -5592,13 +5586,13 @@ snp_pleiotropy
 
 
 #plasmid character
-kleborate<-read_tsv("/Data/tot_results.tsv",show_col_types = FALSE)
+kleborate<-read_tsv("/OriginalData/tot_results.tsv",show_col_types = FALSE)
 
-plasmid<-read_tsv("/Data/summary_ARG.tsv")
+plasmid<-read_tsv("/OriginalData/summary_ARG.tsv")
 plasmid$`#FILE` <- gsub("abricate_","", plasmid$`#FILE`)
 plasmid$`#FILE` <- gsub(".fasta.tsv","", plasmid$`#FILE`)
 
-Fitness<-read_csv("/Data/absolute_fitness_ML.csv")
+Fitness<-read_csv("/OriginalData/absolute_fitness_ML.csv")
 colnames(Fitness)[1]<-"Name"
 Fitness<-Fitness[match(plasmid$`#FILE`,Fitness$Name),]
 
@@ -5636,38 +5630,11 @@ for(i in 1:length(plasmid_rep)){
 
 
 
-#28-29 Introduction-Methods 
-#30-4 Results 
-#5-6 Discussion 
-
-#3.45 4.46 GBP
-#3.56 
-
-#investment products
-#portfolio 
-#passive 
-#strcutured notes 
-
-#Global  #travel 
-#meet in london
-#permitted 
-
-#strcutured note 150K USD 250K GBP
-
-#direct exposure 
-#Global investment into indices 
-
-
-#2 April Introduction 
-#3-10 Results/Discussion 
-#10-15 Review 
-
-#16-20 EHR 
 
 
 #SNP GWAS
 #filtering sNPs in R
-dir_path <- "/Data/SNP_GWAS"
+dir_path <- "/OriginalData/SNP_GWAS"
 
 files <- list.files(
   path = dir_path,
@@ -5711,7 +5678,7 @@ significant_filtered<- significant[significant$Type == "Broad",]
 significant_filtered$Condition <- gsub("[^A-Za-z0-9_]", "", significant_filtered$Condition )
 significant_filtered$Condition <- gsub("_", "", significant_filtered$Condition )
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"))
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"))
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -5793,7 +5760,7 @@ ggplot(df_prop, aes(x = Category, y = prop, fill = factor(indicator))) +
 #Pangenome GWAS
 
 #pangenome
-dir_path <- "/Data/GWAS/panGenome"
+dir_path <- "/OriginalData/GWAS/panGenome"
 
 files <- list.files(
   path = dir_path,
@@ -5841,7 +5808,7 @@ significant_filtered<- significant[significant$Type == "Broad",]
 significant_filtered$Condition <- gsub("[^A-Za-z0-9_]", "", significant_filtered$Condition )
 significant_filtered$Condition <- gsub("_", "", significant_filtered$Condition )
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"))
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"))
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -5920,28 +5887,13 @@ ggplot(df_prop, aes(x = Category, y = prop, fill = factor(indicator))) +
     panel.grid.major.x = element_blank()
   )
 
-#change 
-#liyold banks offshore 
-#tax advise
-
-#no investment account 
-
-#banking cuurrent and saving GBPs 10K worldwide 
-#saving GBPs customer (saving accounts instant no fee 50K 2% fix term deposit cash deposits 6 mo 1 2 year 50K 3.25% 3.2%)
-#50K usd 100K 6 month 3.3%
-
-#mortage prduct buy UK property 1 million 30% for rent residents saudi  
-
-#9-10 results 
-#11-12 Discussion
-#13-15 polish and share
 
 #plot tree for GWAS hits 
 
 library(ape)
 library(phangorn)
 
-pangenome_short<-read_tsv("/Data/gene_presence_absence.Rtab",show_col_types = FALSE)
+pangenome_short<-read_tsv("/OriginalData/gene_presence_absence.Rtab",show_col_types = FALSE)
 
 colnames(pangenome_short)[which(colnames(pangenome_short)=="HA-108")]="HA.108"
 colnames(pangenome_short)[which(colnames(pangenome_short)=="HA-107")]="HA.107"
@@ -5951,8 +5903,8 @@ colnames(pangenome_short)[which(colnames(pangenome_short)=="HA-138")]="HA.138"
 
 tags_short <- colnames(pangenome_short)[-1]
 
-kmer<-read_csv("/Data/total_distance_matrix.csv")
-fintess_mat <- read_csv("/Data/absolute_fitness_ML.csv")
+kmer<-read_csv("/OriginalData/total_distance_matrix.csv")
+fintess_mat <- read_csv("/OriginalData/absolute_fitness_ML.csv")
 colnames(fintess_mat)[1]<-"Name"
 
 colnames(kmer)
@@ -6013,7 +5965,7 @@ gheatmap(p, feature_df,
 
 
 #phylogenetics
-pangenome_short<-read_tsv("/Data/gene_presence_absence.Rtab",show_col_types = FALSE)
+pangenome_short<-read_tsv("/OriginalData/gene_presence_absence.Rtab",show_col_types = FALSE)
 
 colnames(pangenome_short)[which(colnames(pangenome_short)=="HA-108")]="HA.108"
 colnames(pangenome_short)[which(colnames(pangenome_short)=="HA-107")]="HA.107"
@@ -6048,7 +6000,7 @@ table(tmp1, tmp2)
 
 
 #
-cluster_df <- read_csv("/Data/prediction_new/ML_clusters.csv")  
+cluster_df <- read_csv("/OriginalData/prediction_new/ML_clusters.csv")  
 colnames(cluster_df)[1]<- "Name"
 cluster_df_short <- cluster_df[match(common_names,cluster_df$Name),]
 cluster_df_short_choice <- cluster_df_short[,30] %>% pull(.)
@@ -6071,7 +6023,7 @@ gheatmap(p, feature_df,
                     name = "Source")
 
 #show fitness 
-fintess_mat <- read_csv("/Data/absolute_fitness_ML.csv")
+fintess_mat <- read_csv("/OriginalData/absolute_fitness_ML.csv")
 colnames(fintess_mat)[1]<-"Name"
 
 condition <- "LB"
@@ -6117,7 +6069,7 @@ ggplot(fintess_mat, aes(x = .data[[condition]])) +
 
 
 #multiple isolates 
-isolate_list_df  <- read_csv("/Data/gene_1.csv")
+isolate_list_df  <- read_csv("/OriginalData/gene_1.csv")
 isolate_list_df$ID <- as.character( sapply(isolate_list_df$ID, function(x) strsplit(x," ")[[1]][1]))
 condition <- "LB"
 
@@ -6168,10 +6120,10 @@ ggplot(fintess_mat, aes(x = .data[[condition]])) +
 
 
 #baplots
-isolate_list_df  <- read_csv("/Data/gene_1.csv")
+isolate_list_df  <- read_csv("/OriginalData/gene_1.csv")
 isolate_list_df$ID <- as.character( sapply(isolate_list_df$ID, function(x) strsplit(x," ")[[1]][1]))
 
-fintess_mat <- read_csv("/Data/absolute_fitness_ML.csv")
+fintess_mat <- read_csv("/OriginalData/absolute_fitness_ML.csv")
 colnames(fintess_mat)[1]<-"Name"
 
 condition <- "LB"
@@ -6233,7 +6185,7 @@ wilcox.test(values ~ Type, data = df)
 #done
 
 
-pangenome_short<-read_tsv("/Data/gene_presence_absence.Rtab",show_col_types = FALSE)
+pangenome_short<-read_tsv("/OriginalData/gene_presence_absence.Rtab",show_col_types = FALSE)
 
 colnames(pangenome_short)[which(colnames(pangenome_short)=="HA-108")]="HA.108"
 colnames(pangenome_short)[which(colnames(pangenome_short)=="HA-107")]="HA.107"
@@ -6244,7 +6196,7 @@ colnames(pangenome_short)[which(colnames(pangenome_short)=="HA-138")]="HA.138"
 df<-data.frame(t(pangenome_short[ pangenome_short$Gene == "group_1569",])) 
 colnames(df)[1] <- "Gene"
 
-blast <- read_tsv("/Data/group_3530_presence_absence.tsv")
+blast <- read_tsv("/OriginalData/group_3530_presence_absence.tsv")
 blast$pan_gene <- df$Gene[match( blast$Isolate, row.names(df))]
 table(blast$pan_gene, blast$Presence)
 
@@ -6263,7 +6215,7 @@ table(blast$pan_gene, blast$Presence)
 
 
 #barplots v2
-pangenome_short<-read_tsv("/Data/gene_presence_absence.Rtab",show_col_types = FALSE)
+pangenome_short<-read_tsv("/OriginalData/gene_presence_absence.Rtab",show_col_types = FALSE)
 
 colnames(pangenome_short)[which(colnames(pangenome_short)=="HA-108")]="HA.108"
 colnames(pangenome_short)[which(colnames(pangenome_short)=="HA-107")]="HA.107"
@@ -6275,10 +6227,10 @@ isolate_list_df<-data.frame(t(pangenome_short[ pangenome_short$Gene == "group_35
 isolate_list_df$ID <- row.names(isolate_list_df)
 colnames(isolate_list_df)[1] <- "Gene"
 
-#isolate_list_df  <- read_csv("/Data/gene_1.csv")
+#isolate_list_df  <- read_csv("/OriginalData/gene_1.csv")
 #isolate_list_df$ID <- as.character( sapply(isolate_list_df$ID, function(x) strsplit(x," ")[[1]][1]))
 
-fintess_mat <- read_csv("/Data/absolute_fitness_ML.csv")
+fintess_mat <- read_csv("/OriginalData/absolute_fitness_ML.csv")
 colnames(fintess_mat)[1]<-"Name"
 
 condition <- "LB"
@@ -6319,10 +6271,10 @@ wilcox.test(values ~ Type, data = df)
 #importance feature over-representation
 
 
-#write_csv(tot_importance, "/Data/predictive_totall_importance_1.csv")
-importance<- read_csv("/Data/predictive_totall_importance_1.csv")
+#write_csv(tot_importance, "/OriginalData/predictive_totall_importance_1.csv")
+importance<- read_csv("/OriginalData/predictive_totall_importance_1.csv")
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -6333,7 +6285,7 @@ importance <- importance[!is.na(importance$Clean_Tags),]
 
 
 
-importance<- read_csv("/Data/predictive_totall_importance_1.csv")
+importance<- read_csv("/OriginalData/predictive_totall_importance_1.csv")
 
 1207/ sum(table(importance$feature_type))
 importance_short <- importance[importance$rank_final==1,]
@@ -6376,10 +6328,10 @@ ggplot(df, aes(x = category, y = count, fill = feature_type)) +
 
 
 
-inp<-read_csv("/Data/predictive_features.csv")
+inp<-read_csv("/OriginalData/predictive_features.csv")
 colnames(inp)[1]<-"Name"
 
-condition_tags<- read_csv("/Data/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
+condition_tags<- read_csv("/OriginalData/condition_group.csv", locale = locale(encoding = "UTF-8"),show_col_types = FALSE)
 condition_tags$File_name <- gsub("[^A-Za-z0-9_]", "", condition_tags$File_name)
 condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", to = "UTF-8")
 
@@ -6387,7 +6339,7 @@ condition_tags$Clean_Tags <- iconv(condition_tags$Clean_Tags, from = "latin1", t
 inp$category<- condition_tags$Category[match(inp$Name, condition_tags$File_name)]
 inp$Clean_Tags <- condition_tags$Clean_Tags[match(inp$Name, condition_tags$File_name)]
 inp <- inp[!is.na(inp$Clean_Tags),]
-#write_csv(tot_importance, "/Data/predictive_totall_importance_1.csv")
+#write_csv(tot_importance, "/OriginalData/predictive_totall_importance_1.csv")
 inp$STR <- 50
 
 unique(importance$category)
